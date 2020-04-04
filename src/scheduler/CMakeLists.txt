@@ -1,8 +1,8 @@
 ﻿include_directories(.)
 
 set(src_files
-	"ffi.cc"
-	"scheduler.cc"
+    "ffi.cc"
+    "scheduler.cc"
     "errors/error_code.cc"
     "operations/operation.cc")
 
@@ -18,5 +18,5 @@ set_target_properties(coyote_static PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}/bin/")
 
 if(CMAKE_TESTING_ENABLED)
-  add_subdirectory(test)
+    add_subdirectory(test)
 endif()

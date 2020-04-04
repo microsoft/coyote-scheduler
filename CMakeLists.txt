@@ -5,9 +5,13 @@ set(CMAKE_CXX_STANDARD 14)
 
 enable_testing()
 
+if(CMAKE_TESTING_ENABLED AND NOT MSVC)
+    find_package(Threads REQUIRED)
+endif()
+
 if(MSVC)
-  add_compile_options(/permissive-)
-  add_compile_options(/utf-8)
+    add_compile_options(/permissive-)
+    add_compile_options(/utf-8)
 endif()
 
 add_subdirectory(src/scheduler)
