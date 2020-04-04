@@ -26,11 +26,17 @@ namespace coyote
             return "failure";
         case ErrorCode::CompletedAllOperations:
             return "completed all operations";
-        case ErrorCode::ExplicitMainOperationStart:
+        case ErrorCode::DuplicateOperation:
+            return "operation already exists";
+        case ErrorCode::NotExistingOperation:
+            return "operation does not exist";
+        case ErrorCode::MainOperationExplicitlyCreated:
+            return "not allowed to explicitly create main operation '0'";
+        case ErrorCode::MainOperationExplicitlyStarted:
             return "not allowed to explicitly start main operation '0'";
-        case ErrorCode::ExplicitMainOperationComplete:
+        case ErrorCode::MainOperationExplicitlyCompleted:
             return "not allowed to explicitly complete main operation '0'";
-        case ErrorCode::DuplicateOperationStart:
+        case ErrorCode::OperationAlreadyStarted:
             return "operation has already started";
         case ErrorCode::DuplicateResource:
             return "resource already exists";

@@ -26,17 +26,19 @@ void run_iteration()
 {
 	scheduler->attach();
 
-	scheduler->create_next_operation();
+	scheduler->create_operation(WORK_THREAD_1_ID);
 	std::thread t1(work_1);
 
-	scheduler->create_next_operation();
+	scheduler->create_operation(WORK_THREAD_2_ID);
 	std::thread t2(work_2);
+
+	scheduler->join_operation(WORK_THREAD_1_ID);
+	scheduler->join_operation(WORK_THREAD_2_ID);
+	t1.join();
+	t2.join();
 
 	scheduler->detach();
 	assert(scheduler->get_last_error_code(), ErrorCode::Success);
-
-	t1.join();
-	t2.join();
 }
 
 int main()

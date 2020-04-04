@@ -34,7 +34,7 @@ namespace coyote
 		size_t scheduled_operation_id;
 
 		// Count of newly created operations that have not started yet.
-		size_t pending_operation_count;
+		size_t pending_start_operation_count;
 
 		// The id of the main operation.
 		const size_t main_operation_id = 0;
@@ -50,48 +50,54 @@ namespace coyote
 
 		// Attaches to the scheduler. This should be called at the beginning of a testing iteration.
 		// It creates a main operation with id '0'.
-		std::error_code attach();
+		std::error_code attach() noexcept;
 
 		// Detaches from the scheduler. This should be called at the end of a testing iteration.
 		// It completes the main operation with id '0' and releases all controlled operations. 
-		std::error_code detach();
+		std::error_code detach() noexcept;
 
-		// Notifies the scheduler that a new operation was created.
-		std::error_code create_next_operation();
+		// Creates a new operation with the specified id.
+		std::error_code create_operation(size_t operation_id) noexcept;
 		
 		// Starts executing the operation with the specified id.
-		std::error_code start_operation(size_t operation_id);
+		std::error_code start_operation(size_t operation_id) noexcept;
+
+		// Waits until the operation with the specified id has completed.
+		std::error_code join_operation(size_t operation_id) noexcept;
+
+		// Waits until the operations with the specified ids have completed.
+		std::error_code join_operations(const size_t* operation_ids, int size, bool wait_all) noexcept;
 
 		// Completes executing the operation with the specified id and schedules the next operation.
-		std::error_code complete_operation(size_t operation_id);
+		std::error_code complete_operation(size_t operation_id) noexcept;
 
 		// Creates a new resource with the specified id.
-		std::error_code create_resource(size_t resource_id);
+		std::error_code create_resource(size_t resource_id) noexcept;
 
 		// Waits the resource with the specified id to become available and schedules the next operation.
-		std::error_code wait_resource(size_t resource_id);
+		std::error_code wait_resource(size_t resource_id) noexcept;
 		
 		// Waits the resources with the specified ids to become available and schedules the next operation.
-		std::error_code wait_resources(const size_t* resource_ids, int array_size, bool wait_all);
+		std::error_code wait_resources(const size_t* resource_ids, int size, bool wait_all) noexcept;
         
 		// Signals the resource with the specified id is available.
-		std::error_code signal_resource(size_t resource_id);
+		std::error_code signal_resource(size_t resource_id) noexcept;
 
 		// Deletes the resource with the specified id.
-		std::error_code delete_resource(size_t resource_id);
+		std::error_code delete_resource(size_t resource_id) noexcept;
 
 		// Schedules the next enabled operation, which can include the currently executing operation,
 		// if it is enabled.
-		std::error_code schedule_next_operation();
+		std::error_code schedule_next_operation() noexcept;
 
 		// Returns a controlled nondeterministic boolean value.
-		bool get_next_boolean();
+		bool get_next_boolean() noexcept;
 
 		// Returns a controlled nondeterministic integer value chosen from the [0, max_value) range.
-		size_t get_next_integer(size_t max_value);
+		size_t get_next_integer(size_t max_value) noexcept;
 
 		// Returns the last error code, if there is one assigned.
-		std::error_code get_last_error_code();
+		std::error_code get_last_error_code() noexcept;
 
 	private:
 		Scheduler(Scheduler&& op) = delete;
@@ -100,8 +106,9 @@ namespace coyote
 		Scheduler& operator=(Scheduler&& op) = delete;
 		Scheduler& operator=(Scheduler const&) = delete;
 
-		std::unique_lock<std::mutex> Scheduler::start_operation(size_t operation_id, std::unique_lock<std::mutex> lock);
-		std::unique_lock<std::mutex> schedule_next_operation(std::unique_lock<std::mutex> lock);
+		void create_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
+		void start_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
+		void schedule_next_operation(std::unique_lock<std::mutex>& lock);
 	};
 }
 

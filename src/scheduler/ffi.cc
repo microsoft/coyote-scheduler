@@ -23,10 +23,10 @@ extern "C" {
         return error_code.value();
     }
 
-    COYOTE_API int create_next_operation(void* scheduler)
+    COYOTE_API int create_operation(void* scheduler, size_t operation_id)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        std::error_code error_code = ptr->create_next_operation();
+        std::error_code error_code = ptr->create_operation(operation_id);
         return error_code.value();
     }
 
@@ -34,6 +34,20 @@ extern "C" {
     {
         Scheduler* ptr = (Scheduler*)scheduler;
         std::error_code error_code = ptr->start_operation(operation_id);
+        return error_code.value();
+    }
+
+    COYOTE_API int join_operation(void* scheduler, size_t operation_id)
+    {
+        Scheduler* ptr = (Scheduler*)scheduler;
+        std::error_code error_code = ptr->join_operation(operation_id);
+        return error_code.value();
+    }
+
+    COYOTE_API int join_operations(void* scheduler, size_t* operation_ids, int size, bool wait_all)
+    {
+        Scheduler* ptr = (Scheduler*)scheduler;
+        std::error_code error_code = ptr->join_operations(operation_ids, size, wait_all);
         return error_code.value();
     }
 
@@ -58,10 +72,10 @@ extern "C" {
         return error_code.value();
     }
 
-    COYOTE_API int wait_resources(void* scheduler, size_t* resource_ids, int array_size, bool wait_all)
+    COYOTE_API int wait_resources(void* scheduler, size_t* resource_ids, int size, bool wait_all)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        std::error_code error_code = ptr->wait_resources(resource_ids, array_size, wait_all);
+        std::error_code error_code = ptr->wait_resources(resource_ids, size, wait_all);
         return error_code.value();
     }
 

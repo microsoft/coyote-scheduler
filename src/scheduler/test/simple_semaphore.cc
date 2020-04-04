@@ -61,8 +61,9 @@ void run_iteration()
 	std::vector<std::unique_ptr<std::thread>> threads;
 	for (int i = 0; i < 10; i++)
 	{
-		scheduler->create_next_operation();
-		threads.push_back(std::make_unique<std::thread>(work, i + 1));
+		int thread_id = i + 1;
+		scheduler->create_operation(thread_id);
+		threads.push_back(std::make_unique<std::thread>(work, thread_id));
 	}
 
 	scheduler->schedule_next_operation();

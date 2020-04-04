@@ -33,7 +33,7 @@ void run_iteration()
 {
 	scheduler->attach();
 
-	scheduler->create_next_operation();
+	scheduler->create_operation(WORK_THREAD_ID);
 	scheduler->create_resource(WORK_THREAD_ID);
 	std::thread t(work);
 

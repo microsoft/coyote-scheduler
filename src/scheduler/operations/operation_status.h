@@ -10,6 +10,8 @@ namespace coyote
     {
         None = 0,
         Enabled,
+        JoinAnyOperations,
+        JoinAllOperations,
         WaitAnyResource,
         WaitAllResources,
         Completed,
