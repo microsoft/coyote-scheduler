@@ -1,6 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+#include <thread>
 #include "test.h"
 
 using namespace coyote;

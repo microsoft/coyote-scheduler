@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 #include <set>
+#include <thread>
 #include "test.h"
 
 using namespace coyote;

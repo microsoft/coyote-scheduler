@@ -5,8 +5,7 @@
 #define TEST_H
 
 #include <iostream>
-#include <thread>
-#include "..\scheduler.h"
+#include "scheduler.h"
 
 void assert(bool predicate, std::string error)
 {
