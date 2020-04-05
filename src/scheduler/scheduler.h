@@ -11,12 +11,16 @@
 #include <unordered_set>
 #include "errors/error_code.h"
 #include "operations/operation.h"
+#include "strategies/random_strategy.h"
 
 namespace coyote
 {
 	class Scheduler
 	{
 	private:
+		// Strategy for exploring the execution of the client program.
+		std::unique_ptr<RandomStrategy> strategy;
+
 		// Map from unique operation ids to operations.
 		std::map<size_t, std::shared_ptr<Operation>> operation_map;
 
@@ -43,10 +47,11 @@ namespace coyote
 		bool is_attached;
 
 		// The last assigned error code, else success.
-		std::error_code error_code;
+		std::error_code last_error_code;
 
 	public:
 		Scheduler() noexcept;
+		Scheduler(size_t seed) noexcept;
 
 		// Attaches to the scheduler. This should be called at the beginning of a testing iteration.
 		// It creates a main operation with id '0'.
@@ -86,18 +91,21 @@ namespace coyote
 		// Deletes the resource with the specified id.
 		std::error_code delete_resource(size_t resource_id) noexcept;
 
-		// Schedules the next enabled operation, which can include the currently executing operation,
-		// if it is enabled.
-		std::error_code schedule_next_operation() noexcept;
+		// Schedules the next operation, which can include the currently executing operation.
+		// Only operations that are not blocked nor completed can be scheduled.
+		std::error_code schedule_next() noexcept;
 
 		// Returns a controlled nondeterministic boolean value.
-		bool get_next_boolean() noexcept;
+		bool next_boolean() noexcept;
 
 		// Returns a controlled nondeterministic integer value chosen from the [0, max_value) range.
-		size_t get_next_integer(size_t max_value) noexcept;
+		int next_integer(int max_value) noexcept;
+
+		// Returns a seed that can be used to reproduce the current testing iteration.
+		size_t seed() noexcept;
 
 		// Returns the last error code, if there is one assigned.
-		std::error_code get_last_error_code() noexcept;
+		std::error_code error_code() noexcept;
 
 	private:
 		Scheduler(Scheduler&& op) = delete;
@@ -108,7 +116,7 @@ namespace coyote
 
 		void create_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
 		void start_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
-		void schedule_next_operation(std::unique_lock<std::mutex>& lock);
+		void schedule_next(std::unique_lock<std::mutex>& lock);
 	};
 }
 

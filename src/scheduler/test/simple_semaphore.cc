@@ -47,7 +47,7 @@ void work(int id)
 		max_value_observed = shared_var;
 	}
 
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	shared_var--;
 
 	mock_exit_semaphore();
@@ -68,11 +68,11 @@ void run_iteration()
 		threads.push_back(std::make_unique<std::thread>(work, thread_id));
 	}
 
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	assert(max_value_observed <= max_allowed, "the observed max value is greater than allowed");
 
 	scheduler->detach();
-	assert(scheduler->get_last_error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::Success);
 
 	for (int i = 0; i < 10; i++)
 	{

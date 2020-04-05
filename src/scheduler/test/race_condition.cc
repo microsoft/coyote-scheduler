@@ -19,7 +19,7 @@ void work_1()
 	scheduler->start_operation(WORK_THREAD_1_ID);
 
 	shared_var = 1;
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	if (shared_var != 1)
 	{
 		race_found = true;
@@ -33,7 +33,7 @@ void work_2()
 	scheduler->start_operation(WORK_THREAD_2_ID);
 
 	shared_var = 2;
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	if (shared_var != 2)
 	{
 		race_found = true;
@@ -52,7 +52,7 @@ void run_iteration()
 	scheduler->create_operation(WORK_THREAD_2_ID);
 	std::thread t2(work_2);
 
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 
 	scheduler->join_operation(WORK_THREAD_1_ID);
 	scheduler->join_operation(WORK_THREAD_2_ID);
@@ -60,7 +60,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->get_last_error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()

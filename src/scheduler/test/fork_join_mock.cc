@@ -44,7 +44,7 @@ void run_iteration()
 	assert(shared_var == 1, "the shared variable is not equal to 1");
 
 	scheduler->detach();
-	assert(scheduler->get_last_error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()

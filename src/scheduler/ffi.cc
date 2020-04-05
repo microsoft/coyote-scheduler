@@ -93,28 +93,33 @@ extern "C" {
         return error_code.value();
     }
 
-    COYOTE_API int schedule_next_operation(void* scheduler)
+    COYOTE_API int schedule_next(void* scheduler)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        std::error_code error_code = ptr->schedule_next_operation();
+        std::error_code error_code = ptr->schedule_next();
         return error_code.value();
     }
 
-    COYOTE_API bool get_next_boolean(void* scheduler)
+    COYOTE_API bool next_boolean(void* scheduler)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        return ptr->get_next_boolean();
+        return ptr->next_boolean();
     }
 
-    COYOTE_API int get_next_integer(void* scheduler, size_t max_value)
+    COYOTE_API int next_integer(void* scheduler, size_t max_value)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        return ptr->get_next_integer(max_value);
+        return ptr->next_integer(max_value);
     }
 
-    COYOTE_API int get_last_error_code(void* scheduler) {
+    COYOTE_API size_t seed(void* scheduler) {
         Scheduler* ptr = (Scheduler*)scheduler;
-        std::error_code error_code = ptr->get_last_error_code();
+        return ptr->seed();
+    }
+
+    COYOTE_API int error_code(void* scheduler) {
+        Scheduler* ptr = (Scheduler*)scheduler;
+        std::error_code error_code = ptr->error_code();
         return error_code.value();
     }
 

@@ -4,7 +4,8 @@ set(src_files
     "ffi.cc"
     "scheduler.cc"
     "errors/error_code.cc"
-    "operations/operation.cc")
+    "operations/operation.cc"
+    "strategies/random_strategy.cc")
 
 add_library(coyote SHARED ${src_files})
 set_target_properties(coyote PROPERTIES

@@ -14,9 +14,9 @@ int main()
 	{
 		Scheduler* scheduler = new Scheduler();
 		scheduler->attach();
-		assert(scheduler->get_last_error_code(), ErrorCode::Success);
+		assert(scheduler->error_code(), ErrorCode::Success);
 		scheduler->detach();
-		assert(scheduler->get_last_error_code(), ErrorCode::Success);
+		assert(scheduler->error_code(), ErrorCode::Success);
 		delete scheduler;
 	}
 	catch (std::string error)

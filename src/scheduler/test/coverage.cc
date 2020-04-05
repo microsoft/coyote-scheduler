@@ -20,7 +20,7 @@ void work_1()
 	scheduler->start_operation(WORK_THREAD_1_ID);
 
 	curr_trace += "1";
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	curr_trace += "2";
 
 	scheduler->complete_operation(WORK_THREAD_1_ID);
@@ -31,7 +31,7 @@ void work_2()
 	scheduler->start_operation(WORK_THREAD_2_ID);
 
 	curr_trace += "3";
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	curr_trace += "4";
 
 	scheduler->complete_operation(WORK_THREAD_2_ID);
@@ -47,7 +47,7 @@ void run_iteration()
 	scheduler->create_operation(WORK_THREAD_2_ID);
 	std::thread t2(work_2);
 
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 
 	if (curr_trace.size() == 4)
 	{
@@ -61,7 +61,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->get_last_error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()

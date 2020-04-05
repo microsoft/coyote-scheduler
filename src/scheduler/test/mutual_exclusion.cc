@@ -17,7 +17,7 @@ int lock_status = 0;
 
 void mock_acquire()
 {
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 
 	do
 	{
@@ -35,7 +35,7 @@ void mock_acquire()
 
 void mock_release()
 {
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	assert(lock_status == 1, "lock status is not 1.");
 	lock_status = 0;
 	scheduler->signal_resource(LOCK_ID);
@@ -47,7 +47,7 @@ void work_1()
 
 	mock_acquire();
 	shared_var = 1;
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	assert(shared_var == 1, "shared variable is not 1.");
 	mock_release();
 
@@ -60,7 +60,7 @@ void work_2()
 
 	mock_acquire();
 	shared_var = 2;
-	scheduler->schedule_next_operation();
+	scheduler->schedule_next();
 	assert(shared_var == 2, "shared variable is not 2.");
 	mock_release();
 
@@ -84,7 +84,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->get_last_error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()
