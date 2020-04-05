@@ -39,7 +39,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::ScheduleExplored);
 }
 
 int main()

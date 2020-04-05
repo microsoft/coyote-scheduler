@@ -72,7 +72,7 @@ void run_iteration()
 	assert(max_value_observed <= max_allowed, "the observed max value is greater than allowed");
 
 	scheduler->detach();
-	assert(scheduler->error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), ErrorCode::ScheduleExplored);
 
 	for (int i = 0; i < 10; i++)
 	{

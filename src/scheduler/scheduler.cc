@@ -93,7 +93,7 @@ namespace coyote
 			operation_map.clear();
 			resource_map.clear();
 			pending_start_operation_count = 0;
-
+			std::cout << "[coyote::detach] done" << std::endl;
 			strategy->prepare_next_iteration();
 		}
 		catch (ErrorCode error_code)
@@ -200,6 +200,9 @@ namespace coyote
 		auto it = operation_map.find(operation_id);
 		if (it == operation_map.end())
 		{
+#ifndef NDEBUG
+			std::cout << "[coyote::start_operation] not existing operation " << operation_id << std::endl;
+#endif // NDEBUG
 			throw ErrorCode::NotExistingOperation;
 		}
 
@@ -261,6 +264,9 @@ namespace coyote
 			auto it = operation_map.find(operation_id);
 			if (it == operation_map.end())
 			{
+#ifndef NDEBUG
+				std::cout << "[coyote::join_operation] not existing operation " << operation_id << std::endl;
+#endif // NDEBUG
 				throw ErrorCode::NotExistingOperation;
 			}
 
@@ -313,6 +319,9 @@ namespace coyote
 				auto it = operation_map.find(operation_id);
 				if (it == operation_map.end())
 				{
+#ifndef NDEBUG
+					std::cout << "[coyote::join_operations] not existing operation " << operation_id << std::endl;
+#endif // NDEBUG
 					throw ErrorCode::NotExistingOperation;
 				}
 
@@ -366,8 +375,6 @@ namespace coyote
 
 			// The current operation has completed, so schedule the next enabled operation.
 			schedule_next(lock);
-
-			operation_map.erase(operation_id);
 		}
 		catch (ErrorCode error_code)
 		{
@@ -632,40 +639,18 @@ namespace coyote
 		const size_t previous_id = scheduled_operation_id;
 		std::shared_ptr<Operation> previous_op(operation_map.at(previous_id));
 
-		size_t next_id{};
-		std::shared_ptr<Operation> next_op;
-
-		// TODO: replace with strategy.
-		for (auto& op : operation_map)
-		{
-			if (op.second->status == OperationStatus::Enabled)
-			{
-				scheduled_operation_id = next_id = op.first;
-				next_op = std::shared_ptr<Operation>(op.second);
-				break;
-			}
-		}
-
-		if (!next_op)
+		// Ask the strategy for the next operation to schedule.
+		const std::optional<size_t> next_id = strategy->next_operation(operation_map);
+		if (!next_id)
 		{
 #ifndef NDEBUG
-			std::cout << "[coyote::schedule_next_operation] no enabled operation to schedule" << std::endl;
+			std::cout << "[coyote::schedule_next] no enabled operation to schedule" << std::endl;
 #endif // NDEBUG
-			throw ErrorCode::CompletedAllOperations;
+			throw ErrorCode::ScheduleExplored;
 		}
 
-//		// Ask the strategy for the next operation to schedule.
-//		const std::optional<size_t> next_id = strategy->next_operation(operation_map);
-//		if (next_id)
-//		{
-//#ifndef NDEBUG
-//			std::cout << "[coyote::schedule_next] no enabled operation to schedule" << std::endl;
-//#endif // NDEBUG
-//			throw ErrorCode::CompletedAllOperations;
-//		}
-//
-//		scheduled_operation_id = *next_id;
-//		std::shared_ptr<Operation> next_op(operation_map.at(scheduled_operation_id));
+		scheduled_operation_id = *next_id;
+		std::shared_ptr<Operation> next_op(operation_map.at(scheduled_operation_id));
 
 #ifndef NDEBUG
 		std::cout << "[coyote::schedule_next] next operation " << scheduled_operation_id << std::endl;

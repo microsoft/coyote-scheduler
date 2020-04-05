@@ -15,45 +15,35 @@ namespace coyote
 
 	std::optional<size_t> RandomStrategy::next_operation(const std::map<size_t, std::shared_ptr<Operation>>& operations)
 	{
+		std::vector<size_t> enabled_ops;
 		for (auto& op : operations)
 		{
 			if (op.second->status == OperationStatus::Enabled)
 			{
-				return op.first;
+				enabled_ops.push_back(op.first);
 			}
 		}
 
-		return std::nullopt;
+		if (enabled_ops.empty())
+		{
+			return std::nullopt;
+		}
 
-		//// Get all enabled operations.
-		//std::vector<std::shared_ptr<Operation>> enabled_ops;
-		//for (auto& op : operation_map)
-		//{
-		//	if (op.second->status == OperationStatus::Enabled)
-		//	{
-		//		enabled_ops.push_back(std::shared_ptr<Operation>(op.second));
-		//	}
-		//}
-
-		//if (operations.empty())
-		//{
-		//	return nullptr;
-		//}
-
-		//std::uniform_int_distribution<int> distribution(0, operations.size());
+		//const std::uniform_int_distribution<int> distribution(0, enabled_ops.size() - 1);
 		//const size_t index = distribution(generator);
-		//return operations[index];
+		//return enabled_ops[index];
+		return enabled_ops[0];
 	}
 
 	bool RandomStrategy::next_boolean()
 	{
-		std::uniform_int_distribution<int> distribution(0, 1);
+		const std::uniform_int_distribution<int> distribution(0, 1);
 		return distribution(generator);
 	}
 
 	int RandomStrategy::next_integer(int max_value)
 	{
-		std::uniform_int_distribution<int> distribution(0, max_value - 1);
+		const std::uniform_int_distribution<int> distribution(0, max_value - 1);
 		return distribution(generator);
 	}
 

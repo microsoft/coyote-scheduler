@@ -24,8 +24,8 @@ namespace coyote
             return "success";
         case ErrorCode::Failure:
             return "failure";
-        case ErrorCode::CompletedAllOperations:
-            return "completed all operations";
+        case ErrorCode::ScheduleExplored:
+            return "schedule is explored";
         case ErrorCode::DuplicateOperation:
             return "operation already exists";
         case ErrorCode::NotExistingOperation:

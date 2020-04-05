@@ -12,7 +12,7 @@ namespace coyote
     {
         Success = 0,
         Failure = 1,
-        CompletedAllOperations = 100,
+        ScheduleExplored = 100,
         DuplicateOperation = 200,
         NotExistingOperation = 201,
         MainOperationExplicitlyCreated = 202,
