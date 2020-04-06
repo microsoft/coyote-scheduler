@@ -20,6 +20,7 @@ namespace coyote
 		scheduled_operation_id(0),
 		pending_start_operation_count(0),
 		is_attached(false),
+		iteration_count(0),
 		last_error_code(ErrorCode::Success)
 	{
 	}
@@ -39,7 +40,14 @@ namespace coyote
 			}
 
 			is_attached = true;
+			iteration_count += 1;
 			last_error_code = ErrorCode::Success;
+
+			if (iteration_count > 1)
+			{
+				// Prepare the strategy for the next iteration.
+				strategy->prepare_next_iteration();
+			}
 
 			create_operation(main_operation_id, lock);
 			start_operation(main_operation_id, lock);
@@ -94,7 +102,6 @@ namespace coyote
 			resource_map.clear();
 			pending_start_operation_count = 0;
 			std::cout << "[coyote::detach] done" << std::endl;
-			strategy->prepare_next_iteration();
 		}
 		catch (ErrorCode error_code)
 		{

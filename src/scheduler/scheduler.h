@@ -46,6 +46,9 @@ namespace coyote
 		// True if an execution is attached to the scheduler, else false.
 		bool is_attached;
 
+		// The testing iteration count. It increments on each attach.
+		size_t iteration_count;
+
 		// The last assigned error code, else success.
 		std::error_code last_error_code;
 
