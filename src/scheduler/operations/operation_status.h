@@ -14,8 +14,7 @@ namespace coyote
         JoinAllOperations,
         WaitAnyResource,
         WaitAllResources,
-        Completed,
-        Canceled
+        Completed
     };
 }
 

@@ -60,7 +60,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->error_code(), ErrorCode::ScheduleExplored);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()

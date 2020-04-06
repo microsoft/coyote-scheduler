@@ -24,8 +24,8 @@ namespace coyote
             return "success";
         case ErrorCode::Failure:
             return "failure";
-        case ErrorCode::ScheduleExplored:
-            return "schedule is explored";
+        case ErrorCode::DeadlockDetected:
+            return "deadlock detected";
         case ErrorCode::DuplicateOperation:
             return "operation already exists";
         case ErrorCode::NotExistingOperation:
@@ -36,8 +36,12 @@ namespace coyote
             return "not allowed to explicitly start main operation '0'";
         case ErrorCode::MainOperationExplicitlyCompleted:
             return "not allowed to explicitly complete main operation '0'";
+        case ErrorCode::OperationNotStarted:
+            return "operation has not started";
         case ErrorCode::OperationAlreadyStarted:
             return "operation has already started";
+        case ErrorCode::OperationAlreadyCompleted:
+            return "operation has already completed";
         case ErrorCode::DuplicateResource:
             return "resource already exists";
         case ErrorCode::NotExistingResource:

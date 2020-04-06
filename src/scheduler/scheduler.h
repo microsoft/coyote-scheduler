@@ -117,6 +117,8 @@ namespace coyote
 		void create_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
 		void start_operation(size_t operation_id, std::unique_lock<std::mutex>& lock);
 		void schedule_next(std::unique_lock<std::mutex>& lock);
+
+		const std::vector<std::shared_ptr<Operation>> enabled_operations();
 	};
 }
 

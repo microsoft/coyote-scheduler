@@ -39,7 +39,7 @@ void run_iteration()
 	t2.join();
 
 	scheduler->detach();
-	assert(scheduler->error_code(), ErrorCode::ScheduleExplored);
+	assert(scheduler->error_code(), ErrorCode::Success);
 }
 
 int main()
@@ -50,7 +50,7 @@ int main()
 	{
 		scheduler = new Scheduler();
 
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 100; i++)
 		{
 			std::cout << "[test] iteration " << i << std::endl;
 			run_iteration();

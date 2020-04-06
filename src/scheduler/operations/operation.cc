@@ -18,7 +18,7 @@ namespace coyote
 		pending_join_operation_ids.insert(operation_id);
 	}
 
-	void Operation::join_operations(const size_t* operation_ids, int size, bool wait_all)
+	void Operation::join_operations(const std::vector<size_t>& operation_ids, bool wait_all)
 	{
 		if (wait_all)
 		{
@@ -29,9 +29,9 @@ namespace coyote
 			status = OperationStatus::JoinAnyOperations;
 		}
 
-		for (int i = 0; i < size; i++)
+		for (auto& operation_id : operation_ids)
 		{
-			pending_join_operation_ids.insert(*(operation_ids + i));
+			pending_join_operation_ids.insert(operation_id);
 		}
 	}
 

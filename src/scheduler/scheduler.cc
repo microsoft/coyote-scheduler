@@ -85,7 +85,7 @@ namespace coyote
 #endif // NDEBUG
 					// If the operation has not already completed, then cancel it.
 					op->is_scheduled = true;
-					op->status = OperationStatus::Canceled;
+					op->status = OperationStatus::Completed;
 					op->cv.notify_all();
 				}
 			}
@@ -207,7 +207,11 @@ namespace coyote
 		}
 
 		std::shared_ptr<Operation> op(it->second);
-		if (op->status != OperationStatus::None)
+		if (op->status == OperationStatus::Completed)
+		{
+			throw ErrorCode::OperationAlreadyCompleted;
+		}
+		else if (op->status != OperationStatus::None)
 		{
 			throw ErrorCode::OperationAlreadyStarted;
 		}
@@ -219,15 +223,11 @@ namespace coyote
 #endif // NDEBUG
 		if (pending_start_operation_count == 0)
 		{
-#ifndef NDEBUG
-			std::cout << "[coyote::start_operation] no pending operations" << std::endl;
-#endif // NDEBUG
-
 			// If no pending operations remain, then release schedule next.
 			pending_operations_cv.notify_all();
 		}
 
-		if (op->status != OperationStatus::Canceled)
+		if (op->status != OperationStatus::Completed)
 		{
 			op->status = OperationStatus::Enabled;
 			op->cv.notify_all();
@@ -258,9 +258,6 @@ namespace coyote
 				throw ErrorCode::ClientNotAttached;
 			}
 
-			std::shared_ptr<Operation> op(operation_map.at(scheduled_operation_id));
-			op->join_operation(operation_id);
-
 			auto it = operation_map.find(operation_id);
 			if (it == operation_map.end())
 			{
@@ -270,10 +267,23 @@ namespace coyote
 				throw ErrorCode::NotExistingOperation;
 			}
 
-			it->second->blocked_operation_ids.insert(scheduled_operation_id);
+			std::shared_ptr<Operation> join_op(it->second);
+			if (join_op->status != OperationStatus::Completed)
+			{
+				join_op->blocked_operation_ids.insert(scheduled_operation_id);
 
-			// Waiting for the resource to be released, so schedule the next enabled operation.
-			schedule_next(lock);
+				std::shared_ptr<Operation> op(operation_map.at(scheduled_operation_id));
+				op->join_operation(operation_id);
+
+				// Waiting for the resource to be released, so schedule the next enabled operation.
+				schedule_next(lock);
+			}
+#ifndef NDEBUG
+			else
+			{
+				std::cout << "[coyote::join_operation] already completed operation " << operation_id << std::endl;
+			}
+#endif // NDEBUG
 		}
 		catch (ErrorCode error_code)
 		{
@@ -310,9 +320,7 @@ namespace coyote
 				throw ErrorCode::ClientNotAttached;
 			}
 
-			std::shared_ptr<Operation> op(operation_map.at(scheduled_operation_id));
-			op->join_operations(operation_ids, size, wait_all);
-
+			std::vector<size_t> join_operations;
 			for (int i = 0; i < size; i++)
 			{
 				size_t operation_id = *(operation_ids + i);
@@ -325,11 +333,28 @@ namespace coyote
 					throw ErrorCode::NotExistingOperation;
 				}
 
-				it->second->blocked_operation_ids.insert(scheduled_operation_id);
+				std::shared_ptr<Operation> join_op(it->second);
+				if (join_op->status != OperationStatus::Completed)
+				{
+					join_op->blocked_operation_ids.insert(scheduled_operation_id);
+					join_operations.push_back(operation_id);
+				}
+#ifndef NDEBUG
+				else
+				{
+					std::cout << "[coyote::join_operation] already completed operation " << operation_id << std::endl;
+				}
+#endif // NDEBUG
 			}
 
-			// Waiting for the resources to be released, so schedule the next enabled operation.
-			schedule_next(lock);
+			if (!join_operations.empty())
+			{
+				std::shared_ptr<Operation> op(operation_map.at(scheduled_operation_id));
+				op->join_operations(join_operations, wait_all);
+
+				// Waiting for the resources to be released, so schedule the next enabled operation.
+				schedule_next(lock);
+			}
 		}
 		catch (ErrorCode error_code)
 		{
@@ -363,7 +388,25 @@ namespace coyote
 				throw ErrorCode::MainOperationExplicitlyCompleted;
 			}
 
-			std::shared_ptr<Operation> op(operation_map.at(operation_id));
+			auto it = operation_map.find(operation_id);
+			if (it == operation_map.end())
+			{
+#ifndef NDEBUG
+				std::cout << "[coyote::complete_operation] not existing operation " << operation_id << std::endl;
+#endif // NDEBUG
+				throw ErrorCode::NotExistingOperation;
+			}
+
+			std::shared_ptr<Operation> op(it->second);
+			if (op->status == OperationStatus::Completed)
+			{
+				throw ErrorCode::OperationAlreadyCompleted;
+			}
+			else if (op->status == OperationStatus::None)
+			{
+				throw ErrorCode::OperationNotStarted;
+			}
+
 			op->status = OperationStatus::Completed;
 
 			// Notify any operations that are waiting to join this operation.
@@ -630,30 +673,24 @@ namespace coyote
 				" pending operations" << std::endl;
 #endif // NDEBUG
 			pending_operations_cv.wait(lock);
-#ifndef NDEBUG
-			std::cout << "[coyote::schedule_next] waited " << pending_start_operation_count <<
-				" pending operations" << std::endl;
-#endif // NDEBUG
 		}
 
 		const size_t previous_id = scheduled_operation_id;
 		std::shared_ptr<Operation> previous_op(operation_map.at(previous_id));
-
-		// Ask the strategy for the next operation to schedule.
-		const std::optional<size_t> next_id = strategy->next_operation(operation_map);
-		if (!next_id)
+		if (previous_op->status == OperationStatus::JoinAllOperations)
 		{
 #ifndef NDEBUG
-			std::cout << "[coyote::schedule_next] no enabled operation to schedule" << std::endl;
+			std::cout << "[coyote::schedule_next] current operation " << scheduled_operation_id << std::endl;
 #endif // NDEBUG
-			throw ErrorCode::ScheduleExplored;
 		}
 
-		scheduled_operation_id = *next_id;
-		std::shared_ptr<Operation> next_op(operation_map.at(scheduled_operation_id));
+		// Ask the strategy for the next operation to schedule.
+		size_t next_id = strategy->next_operation(enabled_operations());
+		std::shared_ptr<Operation> next_op(operation_map.at(next_id));
+		scheduled_operation_id = next_id;
 
 #ifndef NDEBUG
-		std::cout << "[coyote::schedule_next] next operation " << scheduled_operation_id << std::endl;
+		std::cout << "[coyote::schedule_next] next operation " << next_id << std::endl;
 #endif // NDEBUG
 
 		if (previous_id != next_id)
@@ -681,6 +718,45 @@ namespace coyote
 				}
 			}
 		}
+	}
+
+	const std::vector<std::shared_ptr<Operation>> Scheduler::enabled_operations()
+	{
+		// Get all enabled operations.
+		int blocked_operations = 0;
+		std::vector<std::shared_ptr<Operation>> enabled_ops;
+		for (auto& op : operation_map)
+		{
+			if (op.second->status == OperationStatus::Enabled)
+			{
+				enabled_ops.push_back(std::shared_ptr<Operation>(op.second));
+			}
+			else if (op.second->status == OperationStatus::JoinAllOperations ||
+				op.second->status == OperationStatus::JoinAnyOperations ||
+				op.second->status == OperationStatus::WaitAllResources ||
+				op.second->status == OperationStatus::WaitAnyResource)
+			{
+				blocked_operations += 1;
+			}
+		}
+
+		if (enabled_ops.empty() && blocked_operations > 0)
+		{
+			if (blocked_operations > 0)
+			{
+#ifndef NDEBUG
+				std::cout << "[coyote::schedule_next] deadlock detected" << std::endl;
+#endif // NDEBUG
+				throw ErrorCode::DeadlockDetected;
+			}
+
+#ifndef NDEBUG
+			std::cout << "[coyote::schedule_next] no enabled operation to schedule" << std::endl;
+#endif // NDEBUG
+			throw ErrorCode::Success;
+		}
+
+		return enabled_ops;
 	}
 
 	bool Scheduler::next_boolean() noexcept
