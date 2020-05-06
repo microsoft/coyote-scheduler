@@ -12,8 +12,8 @@ constexpr auto LOCK_ID = 1;
 
 Scheduler* scheduler;
 
-int shared_var = 0;
-int lock_status = 0;
+int shared_var;
+int lock_status;
 
 void mock_acquire()
 {
@@ -98,13 +98,14 @@ int main()
 
 		for (int i = 0; i < 100; i++)
 		{
+			// Initialize the state for the test iteration.
+			shared_var = 0;
+			lock_status = 0;
+
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[test] iteration " << i << std::endl;
 #endif // COYOTE_DEBUG_LOG
 			run_iteration();
-
-			shared_var = 0;
-			lock_status = 0;
 		}
 
 		delete scheduler;

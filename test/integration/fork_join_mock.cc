@@ -6,18 +6,19 @@
 
 using namespace coyote;
 
+constexpr auto RESOURCE_ID = 1;
 constexpr auto WORK_THREAD_ID = 1;
 
 Scheduler* scheduler;
 
-int shared_var = 0;
-int thread_completed = 0;
+int shared_var;
+bool work_completed;
 
 void mock_join()
 {
-	while (thread_completed == 0) 
+	while (!work_completed)
 	{
-		scheduler->wait_resource(WORK_THREAD_ID);
+		scheduler->wait_resource(RESOURCE_ID);
 	}
 }
 
@@ -25,8 +26,8 @@ void work()
 {
 	scheduler->start_operation(WORK_THREAD_ID);
 	shared_var = 1;
-	thread_completed = 1;
-	scheduler->signal_resource(WORK_THREAD_ID);
+	work_completed = true;
+	scheduler->signal_resource(RESOURCE_ID);
 	scheduler->complete_operation(WORK_THREAD_ID);
 }
 
@@ -35,7 +36,7 @@ void run_iteration()
 	scheduler->attach();
 
 	scheduler->create_operation(WORK_THREAD_ID);
-	scheduler->create_resource(WORK_THREAD_ID);
+	scheduler->create_resource(RESOURCE_ID);
 	std::thread t(work);
 
 	mock_join();
@@ -58,13 +59,14 @@ int main()
 
 		for (int i = 0; i < 100; i++)
 		{
+			// Initialize the state for the test iteration.
+			shared_var = 0;
+			work_completed = false;
+
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[test] iteration " << i << std::endl;
 #endif // COYOTE_DEBUG_LOG
 			run_iteration();
-
-			shared_var = 0;
-			thread_completed = 0;
 		}
 
 		delete scheduler;

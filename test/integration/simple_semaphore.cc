@@ -11,12 +11,12 @@ constexpr auto SEMAPHORE_ID = 1;
 
 Scheduler* scheduler;
 
-int shared_var = 0;
-int max_value_observed = 0;
+int shared_var;
+int max_value_observed;
 
 // Mocked semaphore counter.
 const int max_allowed = 2;
-int current_acquired = 0;
+int current_acquired;
 
 void mock_enter_semaphore()
 {
@@ -87,18 +87,19 @@ int main()
 
 	try
 	{
-		scheduler = new Scheduler(345);
+		scheduler = new Scheduler();
 
-		for (int i = 0; i < 1; i++)
+		for (int i = 0; i < 100; i++)
 		{
+			// Initialize the state for the test iteration.
+			shared_var = 0;
+			max_value_observed = 0;
+			current_acquired = 0;
+
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[test] iteration " << i << std::endl;
 #endif // COYOTE_DEBUG_LOG
 			run_iteration();
-
-			shared_var = 0;
-			max_value_observed = 0;
-			current_acquired = 0;
 		}
 
 		delete scheduler;

@@ -511,7 +511,7 @@ namespace coyote
 		{
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
-			std::cout << "[coyote::signal_resource] signaling resource " << resource_id << std::endl;
+			std::cout << "[coyote::signal_resource] signaling all waiting operations about resource " << resource_id << std::endl;
 #endif // COYOTE_DEBUG_LOG
 
 			if (!is_attached)
@@ -528,11 +528,61 @@ namespace coyote
 			std::shared_ptr<std::unordered_set<size_t>> blocked_operation_ids(it->second);
 			for (const auto& blocked_id : *blocked_operation_ids)
 			{
+				std::cout << "[coyote::signal_resource] found " << blocked_id << std::endl;
 				Operation* blocked_op = operation_map.at(blocked_id).get();
+				if (blocked_op->on_resource_signal(resource_id))
+				{
+					std::cout << "[coyote::signal_resource] enabling " << blocked_id << std::endl;
+					operations.enable(blocked_op->id);
+				}
+			}
+
+			blocked_operation_ids->clear();
+		}
+		catch (ErrorCode error_code)
+		{
+			last_error_code = error_code;
+		}
+		catch (...)
+		{
+			last_error_code = ErrorCode::Failure;
+		}
+
+		return last_error_code;
+	}
+
+	ErrorCode Scheduler::signal_resource(size_t resource_id, size_t operation_id) noexcept
+	{
+		try
+		{
+			std::unique_lock<std::mutex> lock(*mutex);
+#ifdef COYOTE_DEBUG_LOG
+			std::cout << "[coyote::signal_resource] signaling waiting operation " << operation_id << " about resource "
+				<< resource_id << std::endl;
+#endif // COYOTE_DEBUG_LOG
+
+			if (!is_attached)
+			{
+				throw ErrorCode::ClientNotAttached;
+			}
+
+			auto it = resource_map.find(resource_id);
+			if (it == resource_map.end())
+			{
+				throw ErrorCode::NotExistingResource;
+			}
+
+			std::shared_ptr<std::unordered_set<size_t>> blocked_operation_ids(it->second);
+			auto op_it = blocked_operation_ids->find(operation_id);
+			if (op_it != blocked_operation_ids->end())
+			{
+				Operation* blocked_op = operation_map.at(operation_id).get();
 				if (blocked_op->on_resource_signal(resource_id))
 				{
 					operations.enable(blocked_op->id);
 				}
+
+				blocked_operation_ids->erase(op_it);
 			}
 		}
 		catch (ErrorCode error_code)

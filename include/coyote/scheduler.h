@@ -92,8 +92,11 @@ namespace coyote
 		// Waits the resources with the specified ids to become available and schedules the next operation.
 		ErrorCode wait_resources(const size_t* resource_ids, size_t size, bool wait_all) noexcept;
         
-		// Signals the resource with the specified id is available.
+		// Signals all waiting operations that the resource with the specified id is available.
 		ErrorCode signal_resource(size_t resource_id) noexcept;
+
+		// Signals the waiting operation that the resource with the specified id is available.
+		ErrorCode signal_resource(size_t resource_id, size_t operation_id) noexcept;
 
 		// Deletes the resource with the specified id.
 		ErrorCode delete_resource(size_t resource_id) noexcept;

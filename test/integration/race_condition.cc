@@ -51,9 +51,6 @@ void work_2()
 
 void run_iteration()
 {
-	shared_var = 0;
-	race_found = false;
-
 	scheduler->attach();
 
 	scheduler->create_operation(WORK_THREAD_1_ID);
@@ -77,26 +74,34 @@ void test()
 {
 	scheduler = new Scheduler();
 
-	for (int i = 0; i < 100000; i++)
+	for (int i = 0; i < 100; i++)
 	{
+		// Initialize the state for the test iteration.
+		shared_var = 0;
+		race_found = false;
+
 #ifdef COYOTE_DEBUG_LOG
 		std::cout << "[test] iteration " << i << std::endl;
 #endif // COYOTE_DEBUG_LOG
 		run_iteration();
-		//if (race_found)
-		//{
-		//	race_seed = scheduler->seed();
-		//	break;
-		//}
+		if (race_found)
+		{
+			race_seed = scheduler->seed();
+			break;
+		}
 	}
 
-	//assert(race_found, "race was not found.");
+	assert(race_found, "race was not found.");
 	delete scheduler;
 }
 
 void replay()
 {
 	scheduler = new Scheduler(race_seed);
+
+	// Initialize the state for replaying.
+	shared_var = 0;
+	race_found = false;
 
 	std::cout << "[test] replaying using seed " << race_seed << std::endl;
 	run_iteration();
@@ -116,7 +121,7 @@ int main()
 		test();
 
 		// Try to replay the bug.
-		//replay();
+		replay();
 	}
 	catch (std::string error)
 	{
