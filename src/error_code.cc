@@ -31,6 +31,8 @@ namespace coyote
             return "operation has already started";
         case ErrorCode::OperationAlreadyCompleted:
             return "operation has already completed";
+        case ErrorCode::OperationNotWaitingResource:
+            return "operation is not waiting this resource";
         case ErrorCode::DuplicateResource:
             return "resource already exists";
         case ErrorCode::NotExistingResource:

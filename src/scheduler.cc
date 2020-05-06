@@ -582,6 +582,10 @@ namespace coyote
 
 				blocked_operation_ids->erase(op_it);
 			}
+			else
+			{
+				throw ErrorCode::OperationNotWaitingResource;
+			}
 		}
 		catch (ErrorCode error_code)
 		{
