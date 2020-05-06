@@ -528,11 +528,9 @@ namespace coyote
 			std::shared_ptr<std::unordered_set<size_t>> blocked_operation_ids(it->second);
 			for (const auto& blocked_id : *blocked_operation_ids)
 			{
-				std::cout << "[coyote::signal_resource] found " << blocked_id << std::endl;
 				Operation* blocked_op = operation_map.at(blocked_id).get();
 				if (blocked_op->on_resource_signal(resource_id))
 				{
-					std::cout << "[coyote::signal_resource] enabling " << blocked_id << std::endl;
 					operations.enable(blocked_op->id);
 				}
 			}
