@@ -13,9 +13,29 @@ namespace coyote
 	{
 	}
 
+<<<<<<< HEAD
 	Scheduler::Scheduler(std::unique_ptr<Settings> settings) noexcept :
 		configuration(std::move(settings)),
 		strategy(std::make_unique<RandomStrategy>(configuration.get())),
+=======
+	Scheduler::Scheduler(size_t seed) noexcept :
+		strategy(std::make_unique<TestingStrategy>(seed)),
+		scheduling_strategy("RandomStrategy"),
+		random_seed(seed),
+		mutex(std::make_unique<std::mutex>()),
+		pending_operations_cv(),
+		scheduled_operation_id(0),
+		pending_start_operation_count(0),
+		is_attached(false),
+		iteration_count(0),
+		last_error_code(ErrorCode::Success)
+	{
+	}
+
+	Scheduler::Scheduler(std::string str) noexcept :
+		strategy(std::make_unique<TestingStrategy>(str)),
+		scheduling_strategy(str),
+>>>>>>> 11e7657 (DFS_Strategy)
 		mutex(std::make_unique<std::mutex>()),
 		pending_operations_cv(),
 		scheduled_op_id(0),
@@ -742,7 +762,11 @@ namespace coyote
 
 	uint64_t Scheduler::random_seed() noexcept
 	{
+<<<<<<< HEAD
 		return strategy->random_seed();
+=======
+		return this->random_seed;
+>>>>>>> 11e7657 (DFS_Strategy)
 	}
 
 	ErrorCode Scheduler::error_code() noexcept

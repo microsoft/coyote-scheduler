@@ -13,7 +13,10 @@
 #include "settings.h"
 #include "operations/operation.h"
 #include "operations/operations.h"
-#include "strategies/random_strategy.h"
+#include "strategies/Probabilistic/random_strategy.h"
+#include "strategies/Exhaustive/dfs_strategy.h"
+#include "strategies/strategy.h"
+#include "strategies/testing_strategy.h"
 
 namespace coyote
 {
@@ -24,7 +27,13 @@ namespace coyote
 		std::unique_ptr<Settings> configuration;
 
 		// Strategy for exploring the execution of the client program.
-		std::unique_ptr<RandomStrategy> strategy;
+		std::unique_ptr<TestingStrategy> strategy;
+
+		// The testing strategy to use.
+		std::string scheduling_strategy;
+
+		// The seed used by random strategy. By default 'null' for other strategy.
+		size_t random_seed = NULL;
 
 		// Map from unique operation ids to operations.
 		std::map<size_t, std::unique_ptr<Operation>> operation_map;
@@ -62,7 +71,12 @@ namespace coyote
 
 	public:
 		Scheduler() noexcept;
+<<<<<<< HEAD
 		Scheduler(std::unique_ptr<Settings> settings) noexcept;
+=======
+		Scheduler(size_t seed) noexcept;
+		Scheduler(std::string str) noexcept;
+>>>>>>> 11e7657 (DFS_Strategy)
 
 		// Attaches to the scheduler. This should be called at the beginning of a testing iteration.
 		// It creates a main operation with id '0'.
