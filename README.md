@@ -2,7 +2,6 @@
 
 ![Windows CI](https://github.com/microsoft/coyote-scheduler/workflows/Windows%20CI/badge.svg)
 ![Linux CI](https://github.com/microsoft/coyote-scheduler/workflows/Linux%20CI/badge.svg)
-![macOS CI](https://github.com/microsoft/coyote-scheduler/workflows/macOS%20CI/badge.svg)
 
 A C++ library for **language-agnostic systematic concurrency testing** by the
 [Coyote](https://microsoft.github.io/coyote/) team in [Microsoft
@@ -18,7 +17,7 @@ To learn more about the research behind our technology, check out our published 
 [here](https://microsoft.github.io/coyote/learn/resources/publications).
 
 ## How to build
-On Linux or macOS, run the following bash script from the root directory:
+On Linux, run the following bash script from the root directory:
 ```bash
 ./scripts/build.sh
 ```
@@ -32,6 +31,8 @@ After building the project, you can find a static and shared library in `bin`.
 
 For more detailed building instructions (e.g. if you want to build without the scripts), read
 [here](./docs/building.md).
+
+*Note: the build/ci scripts do not currently work on macOS, feel free to contribute!*
 
 ## How to use
 To use the Coyote scheduler in a C++ project, link the static or shared library to your project, and
