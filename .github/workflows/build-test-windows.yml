@@ -16,8 +16,8 @@ jobs:
       
       - name: Build the project
         run: .\scripts\build.bat
-        shell: batch
+        shell: pwsh
       
       - name: Run the tests
         run: .\scripts\run-tests.bat
-        shell: batch
+        shell: pwsh
