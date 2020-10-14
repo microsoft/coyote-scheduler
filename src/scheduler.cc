@@ -670,9 +670,9 @@ namespace coyote
 		return strategy->next_integer(max_value);
 	}
 
-	Settings* Scheduler::settings() noexcept
+	size_t Scheduler::seed() noexcept
 	{
-		return configuration.get();
+		return strategy->seed();
 	}
 
 	ErrorCode Scheduler::error_code() noexcept

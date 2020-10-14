@@ -115,8 +115,8 @@ namespace coyote
 		// Returns a controlled nondeterministic integer value chosen from the [0, max_value) range.
 		size_t next_integer(size_t max_value) noexcept;
 
-		// Returns the settings used by the scheduler.
-		Settings* settings() noexcept;
+		// Returns a seed that can be used to reproduce the current testing iteration.
+		size_t seed() noexcept;
 
 		// Returns the last error code, if there is one assigned.
 		ErrorCode error_code() noexcept;
