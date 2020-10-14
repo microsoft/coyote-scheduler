@@ -9,16 +9,16 @@ cd build
 
 REM Build the project
 cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ..
-if not ERRORLEVEL 0 goto error
+if %ERRORLEVEL% NEQ 0 goto error
 
 ninja
-if not ERRORLEVEL 0 goto error
+if %ERRORLEVEL% NEQ 0 goto error
 
 echo Successfully built the project.
 
 :done
 cd ..
-exit /B ERRORLEVEL
+exit /B %ERRORLEVEL%
 
 :error
 echo Failed to build the project.
