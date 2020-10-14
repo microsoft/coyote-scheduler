@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#include <chrono>
 #include <iostream>
 #include <vector>
 #include "scheduler.h"
@@ -10,12 +9,13 @@
 namespace coyote
 {
 	Scheduler::Scheduler() noexcept :
-		Scheduler(std::chrono::high_resolution_clock::now().time_since_epoch().count())
+		Scheduler(std::make_unique<Settings>())
 	{
 	}
 
-	Scheduler::Scheduler(size_t seed) noexcept :
-		strategy(std::make_unique<RandomStrategy>(seed)),
+	Scheduler::Scheduler(std::unique_ptr<Settings> settings) noexcept :
+		configuration(std::move(settings)),
+		strategy(std::make_unique<RandomStrategy>(configuration.get())),
 		mutex(std::make_unique<std::mutex>()),
 		pending_operations_cv(),
 		scheduled_operation_id(0),
@@ -670,9 +670,9 @@ namespace coyote
 		return strategy->next_integer(max_value);
 	}
 
-	size_t Scheduler::seed() noexcept
+	Settings* Scheduler::settings() noexcept
 	{
-		return strategy->seed();
+		return configuration.get();
 	}
 
 	ErrorCode Scheduler::error_code() noexcept

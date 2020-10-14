@@ -10,6 +10,7 @@
 #include <memory>
 #include <unordered_set>
 #include "error_code.h"
+#include "settings.h"
 #include "operations/operation.h"
 #include "operations/operations.h"
 #include "strategies/random_strategy.h"
@@ -19,6 +20,9 @@ namespace coyote
 	class Scheduler
 	{
 	private:
+		// Configures the program exploration.
+		std::unique_ptr<Settings> configuration;
+
 		// Strategy for exploring the execution of the client program.
 		std::unique_ptr<RandomStrategy> strategy;
 
@@ -58,7 +62,7 @@ namespace coyote
 
 	public:
 		Scheduler() noexcept;
-		Scheduler(size_t seed) noexcept;
+		Scheduler(std::unique_ptr<Settings> settings) noexcept;
 
 		// Attaches to the scheduler. This should be called at the beginning of a testing iteration.
 		// It creates a main operation with id '0'.
@@ -111,8 +115,8 @@ namespace coyote
 		// Returns a controlled nondeterministic integer value chosen from the [0, max_value) range.
 		size_t next_integer(size_t max_value) noexcept;
 
-		// Returns a seed that can be used to reproduce the current testing iteration.
-		size_t seed() noexcept;
+		// Returns the settings used by the scheduler.
+		Settings* settings() noexcept;
 
 		// Returns the last error code, if there is one assigned.
 		ErrorCode error_code() noexcept;

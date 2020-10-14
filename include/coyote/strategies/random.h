@@ -8,7 +8,7 @@
 
 namespace coyote
 {
-	// Implements the xeroshiro p64r32 pseudorandom number generator.
+	// Implements the xoroshiro pseudorandom number generator.
 	class Random
 	{
 	private:

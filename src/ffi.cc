@@ -116,10 +116,10 @@ extern "C"
         return ptr->next_integer(max_value);
     }
 
-    COYOTE_API size_t seed(void* scheduler)
+    COYOTE_API size_t random_seed(void* scheduler)
     {
         Scheduler* ptr = (Scheduler*)scheduler;
-        return ptr->seed();
+        return ptr->settings()->seed();
     }
 
     COYOTE_API int error_code(void* scheduler)

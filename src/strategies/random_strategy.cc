@@ -5,9 +5,9 @@
 
 namespace coyote
 {
-	RandomStrategy::RandomStrategy(size_t seed) noexcept :
-		iteration_seed(seed),
-		generator(seed)
+	RandomStrategy::RandomStrategy(Settings* settings) noexcept :
+		iteration_seed(settings->seed()),
+		generator(settings->seed())
 	{
 	}
 

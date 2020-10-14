@@ -86,7 +86,7 @@ void test()
 		run_iteration();
 		if (race_found)
 		{
-			race_seed = scheduler->seed();
+			race_seed = scheduler->settings()->seed();
 			break;
 		}
 	}
@@ -97,7 +97,9 @@ void test()
 
 void replay()
 {
-	scheduler = new Scheduler(race_seed);
+	auto settings = std::make_unique<Settings>();
+	settings->use_random_strategy(race_seed);
+	scheduler = new Scheduler(std::move(settings));
 
 	// Initialize the state for replaying.
 	shared_var = 0;

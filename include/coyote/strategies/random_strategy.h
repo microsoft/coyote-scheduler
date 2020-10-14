@@ -5,6 +5,7 @@
 #define COYOTE_RANDOM_STRATEGY_H
 
 #include "random.h"
+#include "../settings.h"
 #include "../operations/operations.h"
 
 namespace coyote
@@ -19,7 +20,7 @@ namespace coyote
 		size_t iteration_seed;
 
 	public:
-		RandomStrategy(size_t seed) noexcept;
+		RandomStrategy(Settings* settings) noexcept;
 
 		RandomStrategy(RandomStrategy&& strategy) = delete;
 		RandomStrategy(RandomStrategy const&) = delete;

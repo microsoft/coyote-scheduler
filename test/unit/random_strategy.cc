@@ -17,7 +17,10 @@ int main()
 	std::cout << "[test] seed: " << seed << std::endl;
 #endif // !COYOTE_DEBUG_LOG
 
-	auto strategy = std::make_unique<RandomStrategy>(seed);
+	auto settings = std::make_unique<Settings>();
+	settings->use_random_strategy(seed);
+
+	auto strategy = std::make_unique<RandomStrategy>(settings.get());
 	auto replay_strategy = std::make_unique<RandomStrategy>(seed);
 
 	const int num_ops = 20;

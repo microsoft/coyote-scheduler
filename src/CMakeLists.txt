@@ -4,6 +4,7 @@ set(src_files
     "error_code.cc"
     "ffi.cc"
     "scheduler.cc"
+    "settings.cc"
     "operations/operation.cc"
     "operations/operations.cc"
     "strategies/random.cc"
