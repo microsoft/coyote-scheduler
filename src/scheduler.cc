@@ -618,7 +618,7 @@ namespace coyote
 			std::cout << "[coyote::signal_resource] signaling waiting operation " << operation_id << " about resource "
 				<< resource_id << std::endl;
 #endif // COYOTE_DEBUG_LOG
-			
+
 			if (!is_attached)
 			{
 				throw ErrorCode::ClientNotAttached;
