@@ -6,11 +6,11 @@
 
 using namespace coyote;
 
+constexpr auto WORK_THREAD_Res_ID = 5;
 constexpr auto WORK_THREAD_Add_ID = 1;
 constexpr auto WORK_THREAD_Sub_ID = 2;
 constexpr auto WORK_THREAD_Mul_ID = 3;
 constexpr auto WORK_THREAD_Div_ID = 4;
-constexpr auto WORK_THREAD_Res_ID = 5;
 
 Scheduler* scheduler;
 
@@ -19,11 +19,11 @@ int value;
 
 enum class CalculatorOp
 {
-	Add = 0,
-	Sub = 1,
-	Mul = 2,
-	Div = 3,
-	Res = 4
+	Res = 0,
+	Add = 1,
+	Sub = 2,
+	Mul = 3,
+	Div = 4
 };
 
 void work(int operation_id, CalculatorOp op)
@@ -32,7 +32,14 @@ void work(int operation_id, CalculatorOp op)
 
 	for (int i = 1; i <= 100; i++)
 	{
-		if (op == CalculatorOp::Add)
+		if (op == CalculatorOp::Res)
+		{
+#ifdef COYOTE_DEBUG_LOG
+		std::cout << "Executing a 'Res' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+		value = 0;
+		}
+		else if (op == CalculatorOp::Add)
 		{
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing an 'Add' operation (#" << i << ")." << std::endl;
@@ -59,13 +66,6 @@ void work(int operation_id, CalculatorOp op)
 			std::cout << "Executing a 'Div' operation (#" << i << ")." << std::endl;
 #endif // COYOTE_DEBUG_LOG
 			value /= 2;
-		}
-		else if (op == CalculatorOp::Res)
-		{
-#ifdef COYOTE_DEBUG_LOG
-			std::cout << "Executing a 'Res' operation (#" << i << ")." << std::endl;
-#endif // COYOTE_DEBUG_LOG
-			value = 0;
 		}
 
 		// Limit the value between the range [-5000, 5000].
@@ -101,6 +101,9 @@ void run_iteration()
 {
 	scheduler->attach();
 
+	scheduler->create_operation(WORK_THREAD_Res_ID);
+	std::thread resWorker(work, WORK_THREAD_Res_ID, CalculatorOp::Res);
+
 	scheduler->create_operation(WORK_THREAD_Add_ID);
 	std::thread addWorker(work, WORK_THREAD_Add_ID, CalculatorOp::Add);
 
@@ -113,19 +116,16 @@ void run_iteration()
 	scheduler->create_operation(WORK_THREAD_Div_ID);
 	std::thread divWorker(work, WORK_THREAD_Div_ID, CalculatorOp::Div);
 
-	scheduler->create_operation(WORK_THREAD_Res_ID);
-	std::thread resWorker(work, WORK_THREAD_Res_ID, CalculatorOp::Res);
-
+	scheduler->join_operation(WORK_THREAD_Res_ID);
 	scheduler->join_operation(WORK_THREAD_Add_ID);
 	scheduler->join_operation(WORK_THREAD_Sub_ID);
 	scheduler->join_operation(WORK_THREAD_Mul_ID);
 	scheduler->join_operation(WORK_THREAD_Div_ID);
-	scheduler->join_operation(WORK_THREAD_Res_ID);
+	resWorker.join();
 	addWorker.join();
 	subWorker.join();
 	mulWorker.join();
 	divWorker.join();
-	resWorker.join();
 
 	scheduler->detach();
 	assert(scheduler->error_code(), ErrorCode::Success);
