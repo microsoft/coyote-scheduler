@@ -14,6 +14,9 @@ constexpr auto WORK_THREAD_Res_ID = 5;
 
 Scheduler* scheduler;
 
+std::map<int, int> value_map;
+int value;
+
 enum class CalculatorOp
 {
 	Add = 0,
@@ -27,27 +30,65 @@ void work(int operation_id, CalculatorOp op)
 {
 	scheduler->start_operation(operation_id);
 
-	for (int i = 1; i <= 10; i++)
+	for (int i = 1; i <= 100; i++)
 	{
 		if (op == CalculatorOp::Add)
 		{
+#ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing an 'Add' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value++;
 		}
 		else if (op == CalculatorOp::Sub)
 		{
+#ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing a 'Sub' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value--;
 		}
 		else if (op == CalculatorOp::Mul)
 		{
+#ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing a 'Mul' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value *= 2;
 		}
 		else if (op == CalculatorOp::Div)
 		{
+#ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing a 'Div' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value /= 2;
 		}
 		else if (op == CalculatorOp::Res)
 		{
+#ifdef COYOTE_DEBUG_LOG
 			std::cout << "Executing a 'Res' operation (#" << i << ")." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value = 0;
+		}
+
+		// Limit the value between the range [-5000, 5000].
+		if (value > 5000)
+		{
+			value = 5000;
+		}
+		else if (value < -5000)
+		{
+			value = -5000;
+		}
+
+		auto it = value_map.find(value);
+		if (it == value_map.end())
+		{
+#ifdef COYOTE_DEBUG_LOG
+			std::cout << "Found new value " << value << "." << std::endl;
+#endif // COYOTE_DEBUG_LOG
+			value_map.insert(std::pair<int, int>(value, 1));
+		}
+		else
+		{
+			it->second++;
 		}
 
 		scheduler->schedule_next();
@@ -75,8 +116,6 @@ void run_iteration()
 	scheduler->create_operation(WORK_THREAD_Res_ID);
 	std::thread resWorker(work, WORK_THREAD_Res_ID, CalculatorOp::Res);
 
-	scheduler->schedule_next();
-
 	scheduler->join_operation(WORK_THREAD_Add_ID);
 	scheduler->join_operation(WORK_THREAD_Sub_ID);
 	scheduler->join_operation(WORK_THREAD_Mul_ID);
@@ -101,7 +140,7 @@ int main()
 	{
 		scheduler = new Scheduler();
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < 100; i++)
 		{
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[test] iteration " << i << std::endl;
@@ -117,6 +156,7 @@ int main()
 		return 1;
 	}
 
+	std::cout << "[test] found " << value_map.size() << " unique values." << std::endl;
 	std::cout << "[test] done in " << total_time(start_time) << "ms." << std::endl;
 	return 0;
 }
