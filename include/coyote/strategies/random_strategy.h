@@ -38,7 +38,7 @@ namespace coyote
 		size_t next_integer(size_t max_value);
 
 		// Returns the seed used in the current iteration.
-		size_t seed();
+		size_t random_seed();
 
 		// Prepares the next iteration.
 		void prepare_next_iteration();

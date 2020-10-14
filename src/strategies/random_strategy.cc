@@ -6,8 +6,8 @@
 namespace coyote
 {
 	RandomStrategy::RandomStrategy(Settings* settings) noexcept :
-		iteration_seed(settings->seed()),
-		generator(settings->seed())
+		iteration_seed(settings->random_seed()),
+		generator(settings->random_seed())
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace coyote
 		return generator.next() % max_value;
 	}
 
-	size_t RandomStrategy::seed()
+	size_t RandomStrategy::random_seed()
 	{
 		return iteration_seed;
 	}

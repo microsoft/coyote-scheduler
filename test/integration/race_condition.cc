@@ -86,7 +86,7 @@ void test()
 		run_iteration();
 		if (race_found)
 		{
-			race_seed = scheduler->seed();
+			race_seed = scheduler->random_seed();
 			break;
 		}
 	}

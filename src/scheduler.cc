@@ -30,6 +30,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::attach] attaching the main operation" << std::endl;
@@ -69,6 +74,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::detach] releasing all operations" << std::endl;
@@ -122,6 +132,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::create_operation] creating operation " << operation_id << std::endl;
@@ -154,6 +169,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::start_operation] starting operation " << operation_id << std::endl;
@@ -186,6 +206,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::join_operation] joining operation " << operation_id << std::endl;
@@ -240,6 +265,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 			if (wait_all)
 			{
@@ -312,6 +342,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::complete_operation] completing operation " << operation_id << std::endl;
@@ -377,6 +412,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::create_resource] creating resource " << resource_id << std::endl;
@@ -412,6 +452,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+			
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::wait_resource] waiting resource " << resource_id << std::endl;
@@ -454,6 +499,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+
 			std::unique_lock<std::mutex> lock(*mutex);
 			if (wait_all)
 			{
@@ -509,6 +559,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::signal_resource] signaling all waiting operations about resource " << resource_id << std::endl;
@@ -553,12 +608,17 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::signal_resource] signaling waiting operation " << operation_id << " about resource "
 				<< resource_id << std::endl;
 #endif // COYOTE_DEBUG_LOG
-
+			
 			if (!is_attached)
 			{
 				throw ErrorCode::ClientNotAttached;
@@ -599,6 +659,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+		}
+
 			std::unique_lock<std::mutex> lock(*mutex);
 #ifdef COYOTE_DEBUG_LOG
 			std::cout << "[coyote::delete_resource] deleting resource " << resource_id << std::endl;
@@ -633,6 +698,11 @@ namespace coyote
 	{
 		try
 		{
+			if (configuration->exploration_strategy() == Strategy::None)
+			{
+				throw ErrorCode::SchedulerDisabled;
+			}
+
 			std::unique_lock<std::mutex> lock(*mutex);
 
 			if (!is_attached)
@@ -670,9 +740,9 @@ namespace coyote
 		return strategy->next_integer(max_value);
 	}
 
-	size_t Scheduler::seed() noexcept
+	size_t Scheduler::random_seed() noexcept
 	{
-		return strategy->seed();
+		return strategy->random_seed();
 	}
 
 	ErrorCode Scheduler::error_code() noexcept

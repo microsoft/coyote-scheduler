@@ -14,6 +14,7 @@ constexpr auto WORK_THREAD_Div_ID = 4;
 
 Scheduler* scheduler;
 
+std::mutex mutex;
 std::map<int, int> value_map;
 int value;
 
@@ -32,6 +33,7 @@ void work(int operation_id, CalculatorOp op)
 
 	for (int i = 1; i <= 100; i++)
 	{
+		mutex.lock();
 		if (op == CalculatorOp::Res)
 		{
 #ifdef COYOTE_DEBUG_LOG
@@ -69,13 +71,13 @@ void work(int operation_id, CalculatorOp op)
 		}
 
 		// Limit the value between the range [-5000, 5000].
-		if (value > 5000)
+		if (value > 10000)
 		{
-			value = 5000;
+			value = 10000;
 		}
-		else if (value < -5000)
+		else if (value < -10000)
 		{
-			value = -5000;
+			value = -10000;
 		}
 
 		auto it = value_map.find(value);
@@ -91,13 +93,14 @@ void work(int operation_id, CalculatorOp op)
 			it->second++;
 		}
 
+		mutex.unlock();
 		scheduler->schedule_next();
 	}
 
 	scheduler->complete_operation(operation_id);
 }
 
-void run_iteration()
+void run_iteration(ErrorCode expected_error_code)
 {
 	scheduler->attach();
 
@@ -128,7 +131,30 @@ void run_iteration()
 	divWorker.join();
 
 	scheduler->detach();
-	assert(scheduler->error_code(), ErrorCode::Success);
+	assert(scheduler->error_code(), expected_error_code);
+}
+
+void test(std::string scheduler_name, std::unique_ptr<Settings> settings, int iterations, ErrorCode expected_error_code)
+{
+	auto start_time = std::chrono::steady_clock::now();
+	scheduler = new Scheduler(std::move(settings));
+
+	for (int i = 0; i < iterations; i++)
+	{
+		// Initialize the state for the test iteration.
+		value = 0;
+
+#ifdef COYOTE_DEBUG_LOG
+		std::cout << "[test] iteration " << i << std::endl;
+#endif // COYOTE_DEBUG_LOG
+		run_iteration(expected_error_code);
+	}
+
+	delete scheduler;
+
+	std::cout << "[test] " << scheduler_name << " found " << value_map.size() << " unique values in "
+		<< total_time(start_time) << "ms." << std::endl;
+	value_map.clear();
 }
 
 int main()
@@ -136,19 +162,16 @@ int main()
 	std::cout << "[test] started." << std::endl;
 	auto start_time = std::chrono::steady_clock::now();
 
+	int iterations = 1000;
+
 	try
 	{
-		scheduler = new Scheduler();
+		auto settings = std::make_unique<Settings>();
+		settings->disable_scheduling();
+		test("normal execution", std::move(settings), iterations, ErrorCode::SchedulerDisabled);
 
-		for (int i = 0; i < 100; i++)
-		{
-#ifdef COYOTE_DEBUG_LOG
-			std::cout << "[test] iteration " << i << std::endl;
-#endif // COYOTE_DEBUG_LOG
-			run_iteration();
-		}
-
-		delete scheduler;
+		settings = std::make_unique<Settings>();
+		test("random scheduler", std::move(settings), iterations, ErrorCode::Success);
 	}
 	catch (std::string error)
 	{
@@ -156,7 +179,6 @@ int main()
 		return 1;
 	}
 
-	std::cout << "[test] found " << value_map.size() << " unique values." << std::endl;
 	std::cout << "[test] done in " << total_time(start_time) << "ms." << std::endl;
 	return 0;
 }

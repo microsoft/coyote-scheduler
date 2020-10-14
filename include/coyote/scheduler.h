@@ -116,7 +116,7 @@ namespace coyote
 		size_t next_integer(size_t max_value) noexcept;
 
 		// Returns a seed that can be used to reproduce the current testing iteration.
-		size_t seed() noexcept;
+		size_t random_seed() noexcept;
 
 		// Returns the last error code, if there is one assigned.
 		ErrorCode error_code() noexcept;

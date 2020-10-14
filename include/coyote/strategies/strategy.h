@@ -8,7 +8,8 @@ namespace coyote
 {
     enum class Strategy
     {
-        Random = 0
+        None = 0,
+        Random
     };
 }
 
