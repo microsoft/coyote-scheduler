@@ -43,13 +43,13 @@ namespace coyote
 		std::condition_variable pending_operations_cv;
 
 		// The id of the currently scheduled operation.
-		size_t scheduled_operation_id;
+		size_t scheduled_op_id;
 
 		// Count of newly created operations that have not started yet.
 		size_t pending_start_operation_count;
 
 		// The id of the main operation.
-		const size_t main_operation_id = 0;
+		const size_t main_op_id = 0;
 
 		// True if an execution is attached to the scheduler, else false.
 		bool is_attached;
@@ -115,14 +115,14 @@ namespace coyote
 		// Returns a controlled nondeterministic integer value chosen from the [0, max_value) range.
 		size_t next_integer(size_t max_value) noexcept;
 
+		// Returns the id of the currently scheduled operation.
+		size_t scheduled_operation_id() noexcept;
+
 		// Returns a seed that can be used to reproduce the current testing iteration.
 		size_t random_seed() noexcept;
 
 		// Returns the last error code, if there is one assigned.
 		ErrorCode error_code() noexcept;
-
-		// Returns the id of the current operation.
-		size_t get_operation_id() noexcept;
 
 	private:
 		Scheduler(Scheduler&& op) = delete;
