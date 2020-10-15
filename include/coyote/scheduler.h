@@ -121,6 +121,9 @@ namespace coyote
 		// Returns the last error code, if there is one assigned.
 		ErrorCode error_code() noexcept;
 
+		// Returns the id of the current operation.
+		size_t get_operation_id() noexcept;
+
 	private:
 		Scheduler(Scheduler&& op) = delete;
 		Scheduler(Scheduler const&) = delete;

@@ -750,6 +750,11 @@ namespace coyote
 		return last_error_code;
 	}
 
+	size_t Scheduler::get_operation_id() noexcept
+	{
+		return scheduled_operation_id;
+	}
+
 	void Scheduler::create_operation_inner(size_t operation_id)
 	{
 		auto it = operation_map.find(operation_id);
