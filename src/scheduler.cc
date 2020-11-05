@@ -758,9 +758,29 @@ namespace coyote
 	void Scheduler::create_operation_inner(size_t operation_id)
 	{
 		auto it = operation_map.find(operation_id);
-		if (it != operation_map.end())
+		if (it == operation_map.end())
 		{
-			throw ErrorCode::DuplicateOperation;
+			auto result = operation_map.insert(std::pair<size_t, std::unique_ptr<Operation>>(
+				operation_id, std::make_unique<Operation>(operation_id)));
+			if (operation_map.size() == 1)
+			{
+				// This is the first operation, so schedule it.
+				scheduled_op_id = operation_id;
+				result.first->second->is_scheduled = true;
+			}
+		}
+		else
+		{
+			Operation* existing_op = it->second.get();
+			if (existing_op->status == OperationStatus::Completed)
+			{
+				existing_op->status = OperationStatus::None;
+				existing_op->is_scheduled = false;
+			}
+			else
+			{
+				throw ErrorCode::DuplicateOperation;
+			}
 		}
 
 		auto result = operation_map.insert(std::pair<size_t, std::unique_ptr<Operation>>(
