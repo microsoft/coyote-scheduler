@@ -1,7 +1,6 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#include <iostream>
 #include "strategies/random_strategy.h"
 
 namespace coyote
