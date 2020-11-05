@@ -51,9 +51,6 @@ namespace coyote
 #endif // COYOTE_DEBUG_LOG_V2
 		bool found = false;
 		size_t index;
-#ifdef COYOTE_DEBUG_LOG_V2
-		std::cout << "remove-index: " << index << std::endl;
-#endif // COYOTE_DEBUG_LOG_V2
 		if (find_index(operation_id, 0, enabled_operations_size, index))
 		{
 			enabled_operations_size -= 1;
@@ -88,9 +85,6 @@ namespace coyote
 		debug_print();
 #endif // COYOTE_DEBUG_LOG_V2
 		size_t index;
-#ifdef COYOTE_DEBUG_LOG_V2
-		std::cout << "enable-index: " << index << std::endl;
-#endif // COYOTE_DEBUG_LOG_V2
 		if (find_index(operation_id, enabled_operations_size, operation_ids.size(), index))
 		{
 #ifdef COYOTE_DEBUG_LOG_V2
@@ -114,9 +108,6 @@ namespace coyote
 		debug_print();
 #endif // COYOTE_DEBUG_LOG_V2
 		size_t index;
-#ifdef COYOTE_DEBUG_LOG_V2
-		std::cout << "disable-index: " << index << std::endl;
-#endif // COYOTE_DEBUG_LOG_V2
 		if (find_index(operation_id, 0, enabled_operations_size, index))
 		{
 			enabled_operations_size -= 1;
