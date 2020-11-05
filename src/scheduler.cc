@@ -381,7 +381,7 @@ namespace coyote
 			}
 
 			op->status = OperationStatus::Completed;
-			operations.disable(op->id);
+			operations.remove(op->id);
 
 			// Notify any operations that are waiting to join this operation.
 			for (const auto& blocked_id : op->blocked_operation_ids)
