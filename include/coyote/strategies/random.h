@@ -5,6 +5,7 @@
 #define COYOTE_RANDOM_H
 
 #include <cstddef>
+#include <cstdint>
 
 namespace coyote
 {
