@@ -6,30 +6,26 @@
 
 namespace coyote
 {
-	Random::Random(size_t seed) noexcept :
-		state_x(seed),
-		state_y(seed == 0 ? 5489 : 0)
+	Random::Random(uint64_t seed) noexcept :
+		x(seed == 0 ? 5489 : seed),
+		y(seed)
 	{
 		next();
 	}
 
-	void Random::seed(const size_t seed)
+	void Random::seed(const uint64_t seed)
 	{
-		state_x = seed;
-		state_y = seed == 0 ? 5489 : 0;
+		x = seed == 0 ? 5489 : seed;
+		y = seed;
 		next();
 	}
 
-	size_t Random::next()
+	uint64_t Random::next()
 	{
-		const size_t x = state_x;
-		size_t y = state_y;
-		const size_t result = state_x + y;
-
+		uint64_t r = x + y;
 		y ^= x;
-		state_x = rotl(x, 24) ^ y ^ (y << 16);
-		state_y = rotl(y, 37);
-
-		return result;
+		x = rotl(x, 55) ^ y ^ (y << 14);
+		y = rotl(y, 36);
+		return r >> (STATE_BITS - RESULT_BITS);
 	}
 }

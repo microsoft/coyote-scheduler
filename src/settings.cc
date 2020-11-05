@@ -12,7 +12,7 @@ namespace coyote
 	{
 	}
 
-	void Settings::use_random_strategy(size_t seed)
+	void Settings::use_random_strategy(uint64_t seed)
 	{
 		strategy = Strategy::Random;
 		seed_state = seed;
@@ -28,7 +28,7 @@ namespace coyote
 		return strategy;
 	}
 
-	size_t Settings::random_seed()
+	uint64_t Settings::random_seed()
 	{
 		return seed_state;
 	}

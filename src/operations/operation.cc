@@ -52,7 +52,7 @@ namespace coyote
 			status = OperationStatus::WaitAnyResource;
 		}
 
-		for (int i = 0; i < size; i++)
+		for (size_t i = 0; i < size; i++)
 		{
 			pending_signal_resource_ids.insert(*(resource_ids + i));
 		}

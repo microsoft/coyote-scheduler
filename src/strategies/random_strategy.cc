@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+#include <iostream>
 #include "strategies/random_strategy.h"
 
 namespace coyote
@@ -11,10 +12,9 @@ namespace coyote
 	{
 	}
 
-	size_t RandomStrategy::next_operation(Operations& operations)
+	int RandomStrategy::next_operation(Operations& operations)
 	{
-		const size_t index = generator.next() % operations.size();
-		return operations[index];
+		return operations[generator.next() % operations.size()];
 	}
 
 	bool RandomStrategy::next_boolean()
@@ -22,12 +22,12 @@ namespace coyote
 		return (generator.next() & 1) == 0;
 	}
 
-	size_t RandomStrategy::next_integer(size_t max_value)
+	int RandomStrategy::next_integer(int max_value)
 	{
 		return generator.next() % max_value;
 	}
 
-	size_t RandomStrategy::random_seed()
+	uint64_t RandomStrategy::random_seed()
 	{
 		return iteration_seed;
 	}

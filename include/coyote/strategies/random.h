@@ -12,13 +12,14 @@ namespace coyote
 	class Random
 	{
 	private:
-		static constexpr unsigned BITS = 8 * sizeof(size_t);
+        static constexpr unsigned STATE_BITS = 8 * sizeof(uint64_t);
+        static constexpr unsigned RESULT_BITS = 8 * sizeof(uint64_t);
 
-		size_t state_x;
-		size_t state_y;
+        uint64_t x;
+        uint64_t y;
 
 	public:
-		Random(size_t seed) noexcept;
+		Random(uint64_t seed) noexcept;
 
 		Random(Random&& strategy) = delete;
 		Random(Random const&) = delete;
@@ -26,15 +27,15 @@ namespace coyote
 		Random& operator=(Random&& strategy) = delete;
 		Random& operator=(Random const&) = delete;
 
-		void seed(const size_t seed);
+		void seed(const uint64_t seed);
 
 		// Returns the next random number.
-		size_t next();
+        uint64_t next();
 
 	private:
-		static inline size_t rotl(const size_t x, const size_t k)
+		static inline uint64_t rotl(const uint64_t x, const uint64_t k)
 		{
-			return (x << k) | (x >> (BITS - k));
+			return (x << k) | (x >> (STATE_BITS - k));
 		}
 	};
 }

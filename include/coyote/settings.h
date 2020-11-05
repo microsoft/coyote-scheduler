@@ -15,7 +15,7 @@ namespace coyote
 		Strategy strategy;
 
 		// The seed used by randomized strategies.
-		size_t seed_state;
+		uint64_t seed_state;
 
 	public:
 		Settings() noexcept;
@@ -27,7 +27,7 @@ namespace coyote
 		Settings& operator=(Settings const&) = delete;
 
 		// Installs the random exploration strategy with the specified random seed.
-		void use_random_strategy(size_t seed);
+		void use_random_strategy(uint64_t seed);
 
 		// Disables controlled scheduling.
 		void disable_scheduling();
@@ -36,7 +36,7 @@ namespace coyote
 		Strategy exploration_strategy();
 
 		// Returns the seed used by randomized strategies.
-		size_t random_seed();
+		uint64_t random_seed();
 	};
 }
 

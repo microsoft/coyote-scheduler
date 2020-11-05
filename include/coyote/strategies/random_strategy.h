@@ -17,7 +17,7 @@ namespace coyote
 		Random generator;
 
 		// The seed used by the current iteration.
-		size_t iteration_seed;
+		uint64_t iteration_seed;
 
 	public:
 		RandomStrategy(Settings* settings) noexcept;
@@ -29,16 +29,16 @@ namespace coyote
 		RandomStrategy& operator=(RandomStrategy const&) = delete;
 
 		// Returns the next operation.
-		size_t next_operation(Operations& operations);
+		int next_operation(Operations& operations);
 
 		// Returns the next boolean choice.
 		bool next_boolean();
 
 		// Returns the next integer choice.
-		size_t next_integer(size_t max_value);
+		int next_integer(int max_value);
 
 		// Returns the seed used in the current iteration.
-		size_t random_seed();
+		uint64_t random_seed();
 
 		// Prepares the next iteration.
 		void prepare_next_iteration();

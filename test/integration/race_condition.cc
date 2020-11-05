@@ -13,7 +13,7 @@ Scheduler* scheduler;
 
 int shared_var;
 bool race_found;
-size_t race_seed;
+uint64_t race_seed;
 
 void work_1()
 {
