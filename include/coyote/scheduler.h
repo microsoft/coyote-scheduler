@@ -26,9 +26,6 @@ namespace coyote
 		// Strategy for exploring the execution of the client program.
 		std::unique_ptr<Strategy> strategy;
 
-		// The testing strategy to use.
-		std::string scheduling_strategy;
-
 		// Map from unique operation ids to operations.
 		std::map<size_t, std::unique_ptr<Operation>> operation_map;
 
