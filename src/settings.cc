@@ -14,13 +14,13 @@ namespace coyote
 
 	void Settings::use_random_strategy(uint64_t seed)
 	{
-		strategy = StrategyType::Random;
+		strategy_type = StrategyType::Random;
 		seed_state = seed;
 	}
 
 	void Settings::disable_scheduling()
 	{
-		strategy = StrategyType::None;
+		strategy_type = StrategyType::None;
 	}
 
 	StrategyType Settings::exploration_strategy()

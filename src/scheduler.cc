@@ -5,6 +5,8 @@
 #include <vector>
 #include "scheduler.h"
 #include "operations/operation_status.h"
+#include "strategies/random_strategy.h"
+#include "strategies/pct_strategy.h"
 
 namespace coyote
 {
@@ -15,7 +17,7 @@ namespace coyote
 
 	Scheduler::Scheduler(std::unique_ptr<Settings> settings) noexcept :
 		configuration(std::move(settings)),
-		strategy(std::make_unique<RandomStrategy>(configuration.get())),
+		strategy(create_strategy()),
 		mutex(std::make_unique<std::mutex>()),
 		pending_operations_cv(),
 		scheduled_op_id(0),
@@ -24,6 +26,19 @@ namespace coyote
 		iteration_count(0),
 		last_error_code(ErrorCode::Success)
 	{
+	}
+
+	std::unique_ptr<Strategy> Scheduler::create_strategy() noexcept
+	{
+		if (configuration->exploration_strategy() == StrategyType::None ||
+			configuration->exploration_strategy() == StrategyType::Random)
+		{
+			return std::make_unique<RandomStrategy>(configuration.get());
+		}
+		else if (configuration->exploration_strategy() == StrategyType::PCT)
+		{
+			return std::make_unique<RandomStrategy>(configuration.get());
+		}
 	}
 
 	ErrorCode Scheduler::attach() noexcept

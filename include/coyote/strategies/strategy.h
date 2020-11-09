@@ -13,7 +13,7 @@ namespace coyote
 	{
 	public:
 		// Returns the next operation.
-		virtual size_t next_operation(Operations& operations) = 0;
+		virtual int next_operation(Operations& operations) = 0;
 
 		// Returns the next boolean choice.
 		virtual bool next_boolean() = 0;

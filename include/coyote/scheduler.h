@@ -134,7 +134,7 @@ namespace coyote
 		Scheduler& operator=(Scheduler&& op) = delete;
 		Scheduler& operator=(Scheduler const&) = delete;
 
-		std::unique_ptr<Strategy> create_strategy();
+		std::unique_ptr<Strategy> create_strategy() noexcept;
 
 		void create_operation_inner(size_t operation_id);
 		void start_operation_inner(size_t operation_id, std::unique_lock<std::mutex>& lock);

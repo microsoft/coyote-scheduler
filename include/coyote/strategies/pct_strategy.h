@@ -46,13 +46,16 @@ namespace coyote
 		PCTStrategy& operator=(PCTStrategy const&) = delete;
 
 		// Returns the next operation.
-		size_t next_operation(Operations& operations);
+		int next_operation(Operations& operations);
 
 		// Returns the next boolean choice.
 		bool next_boolean();
 
 		// Returns the next integer choice.
 		int next_integer(int max_value);
+
+		// Returns the seed used in the current iteration.
+		uint64_t random_seed();
 
 		// Prepares the next iteration.
 		void prepare_next_iteration();

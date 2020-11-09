@@ -17,7 +17,7 @@ namespace coyote
 		this->priority_change_points = new std::set<int>();
 	}
  
-	size_t PCTStrategy::next_operation(Operations& operations)
+	int PCTStrategy::next_operation(Operations& operations)
 	{
 		std::vector<size_t> enabled_oprs = operations.get_enabled_operation_ids();
 		this->scheduled_steps++;
@@ -34,6 +34,11 @@ namespace coyote
 	{
 		this->scheduled_steps++;
 		return generator.next() % max_value;
+	}
+
+	uint64_t PCTStrategy::random_seed()
+	{
+		return iteration_seed;
 	}
 
 	void PCTStrategy::prepare_next_iteration()
