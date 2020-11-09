@@ -39,6 +39,8 @@ namespace coyote
             return "client is already attached to the scheduler";
         case ErrorCode::ClientNotAttached:
             return "client is not attached to the scheduler";
+        case ErrorCode::InternalError:
+            return "internal error";
         case ErrorCode::SchedulerDisabled:
             return "scheduler is disabled";
         default:

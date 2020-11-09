@@ -35,9 +35,6 @@ namespace coyote
 
 		size_t size(bool is_enabled = true);
 
-		// Return a vector of enabled operations
-		std::vector<size_t> get_enabled_operation_ids();
-
 		void clear();
 
 	private:

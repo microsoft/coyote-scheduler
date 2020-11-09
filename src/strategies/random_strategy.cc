@@ -11,7 +11,7 @@ namespace coyote
 	{
 	}
 
-	int RandomStrategy::next_operation(Operations& operations)
+	int RandomStrategy::next_operation(Operations& operations, size_t current)
 	{
 		return operations[generator.next() % operations.size()];
 	}
@@ -31,7 +31,7 @@ namespace coyote
 		return iteration_seed;
 	}
 
-	void RandomStrategy::prepare_next_iteration()
+	void RandomStrategy::prepare_next_iteration(size_t iteration)
 	{
 		iteration_seed += 1;
 		generator.seed(iteration_seed);

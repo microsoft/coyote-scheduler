@@ -25,7 +25,8 @@ namespace coyote
         NotExistingResource = 301,
         ClientAttached = 400,
         ClientNotAttached = 401,
-        SchedulerDisabled = 500
+        InternalError = 500,
+        SchedulerDisabled = 501
     };
 
     std::string error_message(ErrorCode error_code);

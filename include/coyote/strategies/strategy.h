@@ -13,7 +13,7 @@ namespace coyote
 	{
 	public:
 		// Returns the next operation.
-		virtual int next_operation(Operations& operations) = 0;
+		virtual int next_operation(Operations& operations, size_t current) = 0;
 
 		// Returns the next boolean choice.
 		virtual bool next_boolean() = 0;
@@ -25,7 +25,7 @@ namespace coyote
 		virtual uint64_t random_seed() = 0;
 
 		// Prepares the next iteration.
-		virtual void prepare_next_iteration() = 0;
+		virtual void prepare_next_iteration(size_t iteration) = 0;
 	};
 }
 

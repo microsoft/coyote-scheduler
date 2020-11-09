@@ -4,11 +4,12 @@
 #ifndef COYOTE_PCT_STRATEGY_H
 #define COYOTE_PCT_STRATEGY_H
 
-#include "random.h"
-#include "strategy.h"
 #include <list>
 #include <set>
-#include <chrono>
+#include <unordered_set>
+#include "random.h"
+#include "strategy.h"
+#include "../settings.h"
 
 namespace coyote
 {
@@ -19,25 +20,28 @@ namespace coyote
 		Random generator;
 
 		// The seed used by the current iteration.
-		size_t iteration_seed;
+		uint64_t iteration_seed;
 
-		// Max number of priority switch points.
-		int max_priority_switch_points;
+		// Max number of priority switches during one iteration.
+		int max_priority_switches;
 
-		// Current scheduling index (next sch point)
+		// List of prioritized operations.
+		std::list<size_t> prioritized_operations;
+
+		// Set of operations with a known priority.
+		std::unordered_set<size_t> known_operations;
+
+		// Set of priority change points.
+		std::set<int> priority_change_points;
+
+		//Number of scheduling steps during the current iteration.
 		int scheduled_steps;
 
 		// Approximate length of the schedule across all iterations.
 		int schedule_length;
 
-		// List of prioritized operations.
-		std::list<size_t>* prioritized_operations;
-
-		// Set of priority change points.
-		std::set<int>* priority_change_points;
-
 	public:
-		PCTStrategy(size_t seed, int maxPrioritySwitchPoints = 2) noexcept;
+		PCTStrategy(Settings* settings) noexcept;
 
 		PCTStrategy(PCTStrategy&& strategy) = delete;
 		PCTStrategy(PCTStrategy const&) = delete;
@@ -46,7 +50,7 @@ namespace coyote
 		PCTStrategy& operator=(PCTStrategy const&) = delete;
 
 		// Returns the next operation.
-		int next_operation(Operations& operations);
+		int next_operation(Operations& operations, size_t current);
 
 		// Returns the next boolean choice.
 		bool next_boolean();
@@ -58,18 +62,21 @@ namespace coyote
 		uint64_t random_seed();
 
 		// Prepares the next iteration.
-		void prepare_next_iteration();
+		void prepare_next_iteration(size_t iteration);
 
 	private:
-		// Retrun the prioritized operation
-		size_t get_prioritized_operation(std::vector<size_t> enabled_oprs);
+		// Sets the priority of new operations, if there are any.
+		void set_new_operation_priorities(Operations& operations, size_t current);
+		
+		// Deprioritizes the operation with the highest priority, if there is a priority change point.
+		bool try_deprioritize_operation_with_highest_priority(Operations& operations);
 
-		// Return the highest priority enabled operation
-		size_t get_highest_priority_enabled_operation(std::vector<size_t> enabled_oprs);
+		// Returns the operation with the highest priority.
+		size_t get_operation_with_highest_priority(Operations& operations);
 
-		// Updates the priority change point to some other point (forward)
-		void move_priority_change_point_forward();
+		// Shuffles the priority change points using the Fisher-Yates algorithm.
+		void shuffle_priority_change_points();
 	};
 }
 
-#endif // COYOTE_DFS_STRATEGY_H
+#endif // COYOTE_PCT_STRATEGY_H

@@ -20,6 +20,13 @@ extern "C"
         return new Scheduler(std::move(settings));
     }
 
+    COYOTE_API void* create_scheduler_with_pct_strategy(size_t seed, int bound)
+    {
+        auto settings = std::make_unique<Settings>();
+        settings->use_pct_strategy(seed, bound);
+        return new Scheduler(std::move(settings));
+    }
+
     COYOTE_API int attach(void* scheduler)
     {
         Scheduler* ptr = (Scheduler*)scheduler;

@@ -148,20 +148,6 @@ namespace coyote
 		return false;
 	}
 
-	std::vector<size_t> Operations::get_enabled_operation_ids()
-	{
-		std::vector<size_t> enabled_opr;
-		std::vector<size_t>::iterator it = operation_ids.begin();
-		for (int i = 0; i < enabled_operations_size; i++)
-		{
-			enabled_opr.push_back(*it);
-			it++;
-		}
-
-		std::sort(enabled_opr.begin(), enabled_opr.end());
-		return enabled_opr;
-	}
-
 	void Operations::swap(size_t left, size_t right)
 	{
 		if (left != right)

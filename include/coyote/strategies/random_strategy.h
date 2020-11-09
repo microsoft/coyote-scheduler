@@ -29,7 +29,7 @@ namespace coyote
 		RandomStrategy& operator=(RandomStrategy const&) = delete;
 
 		// Returns the next operation.
-		int next_operation(Operations& operations);
+		int next_operation(Operations& operations, size_t current);
 
 		// Returns the next boolean choice.
 		bool next_boolean();
@@ -41,7 +41,7 @@ namespace coyote
 		uint64_t random_seed();
 
 		// Prepares the next iteration.
-		void prepare_next_iteration();
+		void prepare_next_iteration(size_t iteration);
 	};
 }
 

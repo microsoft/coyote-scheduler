@@ -30,15 +30,12 @@ namespace coyote
 
 	std::unique_ptr<Strategy> Scheduler::create_strategy() noexcept
 	{
-		if (configuration->exploration_strategy() == StrategyType::None ||
-			configuration->exploration_strategy() == StrategyType::Random)
+		if (configuration->exploration_strategy() == StrategyType::PCT)
 		{
-			return std::make_unique<RandomStrategy>(configuration.get());
+			return std::make_unique<PCTStrategy>(configuration.get());
 		}
-		else if (configuration->exploration_strategy() == StrategyType::PCT)
-		{
-			return std::make_unique<RandomStrategy>(configuration.get());
-		}
+
+		return std::make_unique<RandomStrategy>(configuration.get());
 	}
 
 	ErrorCode Scheduler::attach() noexcept
@@ -67,7 +64,7 @@ namespace coyote
 			if (iteration_count > 1)
 			{
 				// Prepare the strategy for the next iteration.
-				strategy->prepare_next_iteration();
+				strategy->prepare_next_iteration(iteration_count);
 			}
 
 			create_operation_inner(main_op_id);
@@ -901,7 +898,7 @@ namespace coyote
 		}
 
 		// Ask the strategy for the next operation to schedule.
-		size_t next_id = strategy->next_operation(operations);
+		size_t next_id = strategy->next_operation(operations, scheduled_op_id);
 		Operation* next_op = operation_map.at(next_id).get();
 
 		const size_t previous_id = scheduled_op_id;
