@@ -68,12 +68,7 @@ namespace coyote
 
 	public:
 		Scheduler() noexcept;
-<<<<<<< HEAD
 		Scheduler(std::unique_ptr<Settings> settings) noexcept;
-=======
-		Scheduler(size_t seed) noexcept;
-		Scheduler(std::string str) noexcept;
->>>>>>> 11e7657 (DFS_Strategy)
 
 		// Attaches to the scheduler. This should be called at the beginning of a testing iteration.
 		// It creates a main operation with id '0'.
