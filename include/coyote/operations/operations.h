@@ -5,8 +5,6 @@
 #define COYOTE_OPERATIONS_H
 
 #include <vector>
-#include <list>
-#include <algorithm>
 
 namespace coyote
 {

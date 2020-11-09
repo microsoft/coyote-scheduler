@@ -8,7 +8,7 @@ mkdir build
 cd build
 
 REM Build the project
-cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Debug ..
+cmake -G "Ninja" -DCMAKE_BUILD_TYPE=Release ..
 if %ERRORLEVEL% NEQ 0 goto error
 
 ninja
