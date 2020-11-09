@@ -5,7 +5,6 @@
 #define COYOTE_STRATEGY_H
 
 #include "../operations/operations.h"
-#include <string>
 
 namespace coyote
 {
