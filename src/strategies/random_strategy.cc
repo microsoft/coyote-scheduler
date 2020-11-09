@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#include "strategies/Probabilistic/random_strategy.h"
+#include "strategies/random_strategy.h"
 
 namespace coyote
 {
@@ -35,15 +35,5 @@ namespace coyote
 	{
 		iteration_seed += 1;
 		generator.seed(iteration_seed);
-	}
-
-	bool RandomStrategy::is_fair()
-	{
-		return true;
-	}
-
-	std::string RandomStrategy::get_description()
-	{
-		return "Random Strategy.";
 	}
 }

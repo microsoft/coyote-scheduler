@@ -8,9 +8,8 @@ set(src_files
     "operations/operation.cc"
     "operations/operations.cc"
     "strategies/random.cc"
-    "strategies/Probabilistic/random_strategy.cc"
-    "strategies/Probabilistic/pct_strategy.cc"
-    "strategies/Exhaustive/dfs_strategy.cc")
+    "strategies/random_strategy.cc"
+    "strategies/pct_strategy.cc")
 
 add_library(coyote SHARED ${src_files})
 set_target_properties(coyote PROPERTIES

@@ -66,18 +66,6 @@ namespace coyote
 		{
 			return strategy->prepare_next_iteration();
 		}
-
-		// Fair strategy or not
-		bool is_fair()
-		{
-			return strategy->is_fair();
-		}
-
-		// Description about the strategy
-		std::string get_description()
-		{
-			return strategy->get_description();
-		}
 	};
 }
 

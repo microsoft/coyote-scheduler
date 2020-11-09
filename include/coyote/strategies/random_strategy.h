@@ -4,6 +4,7 @@
 #ifndef COYOTE_RANDOM_STRATEGY_H
 #define COYOTE_RANDOM_STRATEGY_H
 
+<<<<<<< HEAD
 <<<<<<< HEAD:include/coyote/strategies/random_strategy.h
 #include "random.h"
 <<<<<<< HEAD
@@ -20,6 +21,14 @@
 =======
 #include <string>
 >>>>>>> b1d4a7e (DFS_Strategy)
+=======
+#include "random.h"
+#include "strategy.h"
+<<<<<<< HEAD
+#include "../operations/operations.h"
+>>>>>>> f6a1921 (edits)
+=======
+>>>>>>> c869885 (edits)
 
 namespace coyote
 {
@@ -55,12 +64,6 @@ namespace coyote
 
 		// Prepares the next iteration.
 		void prepare_next_iteration();
-
-		// Description about the strategy
-		std::string get_description();
-
-		// Fair strategy or not
-		bool is_fair();
 	};
 }
 

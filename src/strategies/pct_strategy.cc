@@ -1,14 +1,15 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#include "strategies/Probabilistic/pct_strategy.h"
+#include "strategies/pct_strategy.h"
 #include <iostream>
 
 namespace coyote
 {
-	PCTStrategy::PCTStrategy(int max_priority_switch_points) noexcept : 
-		max_priority_switch_points(max_priority_switch_points), 
-		random_generator(std::chrono::high_resolution_clock::now().time_since_epoch().count())
+	PCTStrategy::PCTStrategy(size_t seed, int max_priority_switch_points) noexcept :
+		iteration_seed(seed),
+		generator(seed),
+		max_priority_switch_points(max_priority_switch_points)
 	{
 		this->schedule_length = 0;
 		this->scheduled_steps = 0;
@@ -26,13 +27,13 @@ namespace coyote
 	bool PCTStrategy::next_boolean()
 	{
 		this->scheduled_steps++;
-		return random_generator.next() & 1;
+		return generator.next() & 1;
 	}
 
 	int PCTStrategy::next_integer(int max_value)
 	{
 		this->scheduled_steps++;
-		return random_generator.next() % max_value;
+		return generator.next() % max_value;
 	}
 
 	void PCTStrategy::prepare_next_iteration()
@@ -55,7 +56,7 @@ namespace coyote
 		// Shuffling the "range" list using Fisher-Yates algorithm.
 		for (int idx = (range.size() - 1); idx >= 1; idx--)
 		{
-			int point = this->random_generator.next() % this->schedule_length;
+			int point = this->generator.next() % this->schedule_length;
 			
 			std::list<int>::iterator idx_itr = range.begin();
 			std::advance(idx_itr, idx);
@@ -74,16 +75,6 @@ namespace coyote
 		}
 	}
 
-	bool PCTStrategy::is_fair()
-	{
-		return false;
-	}
-
-	std::string PCTStrategy::get_description()
-	{
-		return "Testing using PCT Strategy with priority change points - " + std::to_string(this->max_priority_switch_points);
-	}
-
 	size_t PCTStrategy::get_prioritized_operation(std::vector<size_t> ops)
 	{
 		for (std::vector<size_t>::iterator it = ops.begin(); it != ops.end(); it++)
@@ -100,7 +91,7 @@ namespace coyote
 
 			if (flag)
 			{
-				auto mIndex = this->random_generator.next() % (this->prioritized_operations->size() + 1);
+				auto mIndex = this->generator.next() % (this->prioritized_operations->size() + 1);
 				std::list<size_t>::iterator iter = this->prioritized_operations->begin();
 				std::advance(iter, mIndex);
 				this->prioritized_operations->insert(iter, *it);

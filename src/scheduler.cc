@@ -46,6 +46,8 @@ namespace coyote
 	{
 	}
 
+
+
 	ErrorCode Scheduler::attach() noexcept
 	{
 		try
@@ -763,10 +765,14 @@ namespace coyote
 	uint64_t Scheduler::random_seed() noexcept
 	{
 <<<<<<< HEAD
+<<<<<<< HEAD
 		return strategy->random_seed();
 =======
 		return this->random_seed;
 >>>>>>> 11e7657 (DFS_Strategy)
+=======
+		return strategy->seed();
+>>>>>>> 036249e (edits)
 	}
 
 	ErrorCode Scheduler::error_code() noexcept

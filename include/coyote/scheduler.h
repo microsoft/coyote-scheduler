@@ -13,10 +13,7 @@
 #include "settings.h"
 #include "operations/operation.h"
 #include "operations/operations.h"
-#include "strategies/Probabilistic/random_strategy.h"
-#include "strategies/Exhaustive/dfs_strategy.h"
 #include "strategies/strategy.h"
-#include "strategies/testing_strategy.h"
 
 namespace coyote
 {
@@ -27,7 +24,7 @@ namespace coyote
 		std::unique_ptr<Settings> configuration;
 
 		// Strategy for exploring the execution of the client program.
-		std::unique_ptr<TestingStrategy> strategy;
+		std::unique_ptr<Strategy> strategy;
 
 		// The testing strategy to use.
 		std::string scheduling_strategy;
@@ -144,6 +141,8 @@ namespace coyote
 
 		Scheduler& operator=(Scheduler&& op) = delete;
 		Scheduler& operator=(Scheduler const&) = delete;
+
+		std::unique_ptr<Strategy> create_strategy();
 
 		void create_operation_inner(size_t operation_id);
 		void start_operation_inner(size_t operation_id, std::unique_lock<std::mutex>& lock);
