@@ -29,9 +29,6 @@ namespace coyote
 		// The testing strategy to use.
 		std::string scheduling_strategy;
 
-		// The seed used by random strategy. By default 'null' for other strategy.
-		size_t random_seed = NULL;
-
 		// Map from unique operation ids to operations.
 		std::map<size_t, std::unique_ptr<Operation>> operation_map;
 

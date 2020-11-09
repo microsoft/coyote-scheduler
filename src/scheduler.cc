@@ -30,7 +30,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -74,7 +74,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -132,7 +132,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -169,7 +169,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -206,7 +206,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -265,7 +265,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -342,7 +342,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -412,7 +412,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -452,7 +452,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -499,7 +499,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -559,7 +559,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -608,7 +608,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}
@@ -659,7 +659,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 		}
@@ -698,7 +698,7 @@ namespace coyote
 	{
 		try
 		{
-			if (configuration->exploration_strategy() == Strategy::None)
+			if (configuration->exploration_strategy() == StrategyType::None)
 			{
 				throw ErrorCode::SchedulerDisabled;
 			}

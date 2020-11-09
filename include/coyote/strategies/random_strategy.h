@@ -4,31 +4,9 @@
 #ifndef COYOTE_RANDOM_STRATEGY_H
 #define COYOTE_RANDOM_STRATEGY_H
 
-<<<<<<< HEAD
-<<<<<<< HEAD:include/coyote/strategies/random_strategy.h
 #include "random.h"
-<<<<<<< HEAD
+#include "strategy.h"
 #include "../settings.h"
-#include "../operations/operations.h"
-=======
-#include "strategy.h"
->>>>>>> 11e7657 (DFS_Strategy)
-=======
-#include "../random.h"
-#include "../strategy.h"
-<<<<<<< HEAD
->>>>>>> 212cb6d (DFS_Strategy):include/coyote/strategies/Probabilistic/random_strategy.h
-=======
-#include <string>
->>>>>>> b1d4a7e (DFS_Strategy)
-=======
-#include "random.h"
-#include "strategy.h"
-<<<<<<< HEAD
-#include "../operations/operations.h"
->>>>>>> f6a1921 (edits)
-=======
->>>>>>> c869885 (edits)
 
 namespace coyote
 {

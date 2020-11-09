@@ -4,7 +4,7 @@
 #ifndef COYOTE_CONFIGURATION_H
 #define COYOTE_CONFIGURATION_H
 
-#include "strategies/strategy.h"
+#include "strategies/strategy_type.h"
 
 namespace coyote
 {
@@ -12,7 +12,7 @@ namespace coyote
 	{
 	private:
 		// The execution exploration strategy.
-		Strategy strategy;
+		StrategyType strategy_type;
 
 		// The seed used by randomized strategies.
 		uint64_t seed_state;
@@ -33,7 +33,7 @@ namespace coyote
 		void disable_scheduling();
 
 		// Returns the type of the installed exploration strategy.
-		Strategy exploration_strategy();
+		StrategyType exploration_strategy();
 
 		// Returns the seed used by randomized strategies.
 		uint64_t random_seed();
