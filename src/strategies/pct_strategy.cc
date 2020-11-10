@@ -46,7 +46,7 @@ namespace coyote
 			if (it == known_operations.end())
 			{
 				// Randomly choose a priority for this operation.
-				auto index = generator.next() % (prioritized_operations.size() + 1);
+				auto index = (generator.next() % prioritized_operations.size()) + 1;
 				auto it = prioritized_operations.begin();
 				std::advance(it, index);
 				prioritized_operations.insert(it, next_op);
