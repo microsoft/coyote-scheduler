@@ -23,7 +23,7 @@ namespace coyote
 		uint64_t iteration_seed;
 
 		// Max number of priority switches during one iteration.
-		int max_priority_switches;
+		size_t max_priority_switches;
 
 		// List of prioritized operations.
 		std::list<size_t> prioritized_operations;
@@ -32,13 +32,13 @@ namespace coyote
 		std::unordered_set<size_t> known_operations;
 
 		// Set of priority change points.
-		std::set<int> priority_change_points;
+		std::set<size_t> priority_change_points;
 
 		//Number of scheduling steps during the current iteration.
-		int scheduled_steps;
+		size_t scheduled_steps;
 
 		// Approximate length of the schedule across all iterations.
-		int schedule_length;
+		size_t schedule_length;
 
 	public:
 		PCTStrategy(Settings* settings) noexcept;

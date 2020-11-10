@@ -122,7 +122,7 @@ namespace coyote
 		// iteration and onwards. Note that although we could initialize the first length based on a
 		// heuristic, its not worth it, as the strategy will typically explore thousands of iterations,
 		// plus its also interesting to explore a schedule with no forced priority change points.
-		if (iteration > 0)
+		if (iteration > 1)
 		{
 			if (schedule_length < scheduled_steps)
 			{
@@ -141,36 +141,35 @@ namespace coyote
 
 	void PCTStrategy::shuffle_priority_change_points()
 	{
-		std::list<int> range;
-		for (int i = 1; i < schedule_length; i++)
+		if (schedule_length > 1)
 		{
-			range.push_back(i);
-		}
-
-		for (int idx = range.size() - 1; idx >= 1; idx--)
-		{
-			int point = generator.next() % range.size();
-
-			std::list<int>::iterator idx_it = range.begin();
-			std::advance(idx_it, idx);
-
-			std::list<int>::iterator point_it = range.begin();
-			std::advance(point_it, point);
-
-			std::iter_swap(idx_it, point_it);
-		}
-
-		int count = 0;
-		for (auto it = range.begin(); it != range.end(); it++)
-		{
-#ifdef COYOTE_DEBUG_LOG
-			std::cout << "[coyote::pct] assigning priority change at " << *it << " step" << std::endl;
-#endif // COYOTE_DEBUG_LOG
-			priority_change_points.insert(*it);
-			count++;
-			if (count == max_priority_switches)
+			std::list<size_t> range;
+			for (size_t i = 1; i < schedule_length; i++)
 			{
-				break;
+				range.push_back(i);
+			}
+
+			for (size_t idx = range.size() - 1; idx >= 1; idx--)
+			{
+				size_t point = generator.next() % range.size();
+
+				std::list<size_t>::iterator idx_it = range.begin();
+				std::advance(idx_it, idx);
+
+				std::list<size_t>::iterator point_it = range.begin();
+				std::advance(point_it, point);
+
+				std::iter_swap(idx_it, point_it);
+			}
+
+			size_t count = max_priority_switches;
+			for (auto it = range.begin(); count > 0 && it != range.end(); it++)
+			{
+#ifdef COYOTE_DEBUG_LOG
+				std::cout << "[coyote::pct] assigning priority change at " << *it << " step" << std::endl;
+#endif // COYOTE_DEBUG_LOG
+				priority_change_points.insert(*it);
+				count--;
 			}
 		}
 	}

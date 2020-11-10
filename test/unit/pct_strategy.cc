@@ -17,7 +17,7 @@ int main()
 	std::cout << "[test] seed: " << seed << std::endl;
 #endif // !COYOTE_DEBUG_LOG
 
-	const int num_priority_change_points = 3;
+	const size_t num_priority_change_points = 3;
 
 	auto settings = std::make_unique<Settings>();
 	settings->use_pct_strategy(seed, num_priority_change_points);
@@ -60,7 +60,7 @@ int main()
 
 	strategy->prepare_next_iteration(2);
 
-	int num_priority_changes = 0;
+	size_t num_priority_changes = 0;
 	op = 0;
 	for (int i = 0; i < num_ops; i++)
 	{

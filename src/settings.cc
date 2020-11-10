@@ -18,7 +18,7 @@ namespace coyote
 		seed_state = seed;
 	}
 
-	void Settings::use_pct_strategy(uint64_t seed, int bound) noexcept
+	void Settings::use_pct_strategy(uint64_t seed, size_t bound) noexcept
 	{
 		strategy_type = StrategyType::PCT;
 		seed_state = seed;
@@ -35,7 +35,7 @@ namespace coyote
 		return strategy_type;
 	}
 
-	int Settings::exploration_strategy_bound() noexcept
+	size_t Settings::exploration_strategy_bound() noexcept
 	{
 		return strategy_bound;
 	}

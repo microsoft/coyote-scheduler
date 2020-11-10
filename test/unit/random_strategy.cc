@@ -40,7 +40,7 @@ int main()
 	size_t op = 0;
 	for (int i = 0; i < num_ops; i++)
 	{
-		size_t op = strategy->next_operation(ops, op);
+		op = strategy->next_operation(ops, op);
 #ifdef COYOTE_DEBUG_LOG
 		std::cout << "[test] random op choice: " << op << std::endl;
 #endif // !COYOTE_DEBUG_LOG

@@ -15,7 +15,7 @@ namespace coyote
 		StrategyType strategy_type;
 
 		// A strategy-specific bound.
-		int strategy_bound;
+		size_t strategy_bound;
 
 		// The seed used by randomized strategies.
 		uint64_t seed_state;
@@ -33,7 +33,7 @@ namespace coyote
 		void use_random_strategy(uint64_t seed) noexcept;
 
 		// Installs the PCT exploration strategy with the specified random seed and priority switch bound.
-		void use_pct_strategy(uint64_t seed, int bound) noexcept;
+		void use_pct_strategy(uint64_t seed, size_t bound) noexcept;
 
 		// Disables controlled scheduling.
 		void disable_scheduling() noexcept;
@@ -42,7 +42,7 @@ namespace coyote
 		StrategyType exploration_strategy() noexcept;
 
 		// Returns an exploration strategy specific bound.
-		int exploration_strategy_bound() noexcept;
+		size_t exploration_strategy_bound() noexcept;
 
 		// Returns the seed used by randomized strategies.
 		uint64_t random_seed() noexcept;

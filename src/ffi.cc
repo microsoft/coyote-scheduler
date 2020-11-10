@@ -13,14 +13,14 @@ extern "C"
         return new Scheduler();
     }
 
-    COYOTE_API void* create_scheduler_with_random_strategy(size_t seed)
+    COYOTE_API void* create_scheduler_with_random_strategy(uint64_t seed)
     {
         auto settings = std::make_unique<Settings>();
         settings->use_random_strategy(seed);
         return new Scheduler(std::move(settings));
     }
 
-    COYOTE_API void* create_scheduler_with_pct_strategy(size_t seed, int bound)
+    COYOTE_API void* create_scheduler_with_pct_strategy(uint64_t seed, size_t bound)
     {
         auto settings = std::make_unique<Settings>();
         settings->use_pct_strategy(seed, bound);
