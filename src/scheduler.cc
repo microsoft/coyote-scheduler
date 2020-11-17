@@ -6,7 +6,6 @@
 #include "scheduler.h"
 #include "operations/operation_status.h"
 #include "strategies/random_strategy.h"
-#include "strategies/probabilistic_strategy.h"
 #include "strategies/pct_strategy.h"
 
 namespace coyote
@@ -34,10 +33,6 @@ namespace coyote
 		if (configuration->exploration_strategy() == StrategyType::PCT)
 		{
 			return std::make_unique<PCTStrategy>(configuration.get());
-		}
-		else if (configuration->exploration_strategy() == StrategyType::Probabilistic)
-		{
-			return std::make_unique<ProbabilisticStrategy>(configuration.get());
 		}
 
 		return std::make_unique<RandomStrategy>(configuration.get());

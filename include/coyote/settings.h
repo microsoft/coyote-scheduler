@@ -32,8 +32,9 @@ namespace coyote
 		// Installs the random exploration strategy with the specified random seed.
 		void use_random_strategy(uint64_t seed) noexcept;
 
-		// Installs the probabilistic exploration strategy with the specified random seed and context switch difficulty.
-		void use_probabilistic_strategy(uint64_t seed, size_t difficulty) noexcept;
+		// Installs the random exploration strategy with the specified random seed and probability
+		// of deviating from the currently scheduled enabled operation.
+		void use_random_strategy(uint64_t seed, size_t probability);
 
 		// Installs the PCT exploration strategy with the specified random seed and priority switch bound.
 		void use_pct_strategy(uint64_t seed, size_t bound) noexcept;

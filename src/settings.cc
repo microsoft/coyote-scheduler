@@ -2,6 +2,7 @@
 // Licensed under the MIT License.
 
 #include <chrono>
+#include <stdexcept>
 #include "settings.h"
 
 namespace coyote
@@ -16,13 +17,18 @@ namespace coyote
 	{
 		strategy_type = StrategyType::Random;
 		seed_state = seed;
+		strategy_bound = 100;
 	}
 
-	void Settings::use_probabilistic_strategy(uint64_t seed, size_t difficulty) noexcept
+	void Settings::use_random_strategy(uint64_t seed, size_t probability)
 	{
-		strategy_type = StrategyType::Probabilistic;
+		if ( probability > 100) {
+        throw std::invalid_argument("received probability greater than 100");
+    }
+
+		strategy_type = StrategyType::Random;
 		seed_state = seed;
-		strategy_bound = difficulty;
+		strategy_bound = probability;
 	}
 
 	void Settings::use_pct_strategy(uint64_t seed, size_t bound) noexcept

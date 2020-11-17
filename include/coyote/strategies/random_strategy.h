@@ -19,6 +19,9 @@ namespace coyote
 		// The seed used by the current iteration.
 		uint64_t iteration_seed;
 
+		// The probability of deviating from the current operation if it is enabled.
+		size_t scheduling_deviation_probability;
+
 	public:
 		RandomStrategy(Settings* settings) noexcept;
 

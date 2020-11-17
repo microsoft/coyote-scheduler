@@ -7,12 +7,31 @@ namespace coyote
 {
 	RandomStrategy::RandomStrategy(Settings* settings) noexcept :
 		iteration_seed(settings->random_seed()),
-		generator(settings->random_seed())
+		generator(settings->random_seed()),
+		scheduling_deviation_probability(settings->exploration_strategy_bound())
 	{
 	}
 
 	size_t RandomStrategy::next_operation(Operations& operations, size_t current)
 	{
+		if (scheduling_deviation_probability < 100)
+		{
+			bool isCurrentEnabled = false;
+			for (size_t idx = 0; idx < operations.size(); idx++)
+			{
+				if (operations[idx] == current)
+				{
+					isCurrentEnabled = true;
+					break;
+				}
+			}
+
+			if (isCurrentEnabled && (generator.next() % 100) > scheduling_deviation_probability)
+			{
+				return current;
+			}
+		}
+
 		return operations[generator.next() % operations.size()];
 	}
 
