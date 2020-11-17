@@ -41,9 +41,9 @@ int main()
 	for (int i = 0; i < num_ops; i++)
 	{
 		op = strategy->next_operation(ops, op);
-// #ifdef COYOTE_DEBUG_LOG
+#ifdef COYOTE_DEBUG_LOG
 		std::cout << "[test] random op choice: " << op << std::endl;
-// #endif // !COYOTE_DEBUG_LOG
+#endif // !COYOTE_DEBUG_LOG
 		op_choices[i] = op;
 	}
 
