@@ -12,7 +12,7 @@ namespace coyote
 	{
 	}
 
-	size_t RandomStrategy::next_operation(Operations& operations, size_t current)
+	int RandomStrategy::next_operation(Operations& operations, size_t current)
 	{
 		if (scheduling_deviation_probability < 100)
 		{
