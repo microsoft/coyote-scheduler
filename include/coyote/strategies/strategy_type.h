@@ -10,6 +10,7 @@ namespace coyote
     {
         None = 0,
         Random,
+        Probabilistic,
         PCT
     };
 }

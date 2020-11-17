@@ -1,8 +1,8 @@
 ﻿// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#ifndef COYOTE_RANDOM_STRATEGY_H
-#define COYOTE_RANDOM_STRATEGY_H
+#ifndef COYOTE_PROBABILISTIC_STRATEGY_H
+#define COYOTE_PROBABILISTIC_STRATEGY_H
 
 #include "random.h"
 #include "strategy.h"
@@ -10,7 +10,7 @@
 
 namespace coyote
 {
-	class RandomStrategy : public Strategy
+	class ProbabilisticStrategy : public Strategy
 	{
 	private:
 		// The pseudo-random generator.
@@ -19,14 +19,17 @@ namespace coyote
 		// The seed used by the current iteration.
 		uint64_t iteration_seed;
 
+		// The difficulty to context switch.
+		size_t difficulty;
+
 	public:
-		RandomStrategy(Settings* settings) noexcept;
+		ProbabilisticStrategy(Settings* settings) noexcept;
 
-		RandomStrategy(RandomStrategy&& strategy) = delete;
-		RandomStrategy(RandomStrategy const&) = delete;
+		ProbabilisticStrategy(ProbabilisticStrategy&& strategy) = delete;
+		ProbabilisticStrategy(ProbabilisticStrategy const&) = delete;
 
-		RandomStrategy& operator=(RandomStrategy&& strategy) = delete;
-		RandomStrategy& operator=(RandomStrategy const&) = delete;
+		ProbabilisticStrategy& operator=(ProbabilisticStrategy&& strategy) = delete;
+		ProbabilisticStrategy& operator=(ProbabilisticStrategy const&) = delete;
 
 		// Returns the next operation.
 		size_t next_operation(Operations& operations, size_t current);
@@ -45,4 +48,4 @@ namespace coyote
 	};
 }
 
-#endif // COYOTE_RANDOM_STRATEGY_H
+#endif // COYOTE_PROBABILISTIC_STRATEGY_H

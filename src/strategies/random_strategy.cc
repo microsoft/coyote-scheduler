@@ -11,7 +11,7 @@ namespace coyote
 	{
 	}
 
-	int RandomStrategy::next_operation(Operations& operations, size_t current)
+	size_t RandomStrategy::next_operation(Operations& operations, size_t current)
 	{
 		return operations[generator.next() % operations.size()];
 	}

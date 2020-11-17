@@ -18,6 +18,13 @@ namespace coyote
 		seed_state = seed;
 	}
 
+	void Settings::use_probabilistic_strategy(uint64_t seed, size_t difficulty) noexcept
+	{
+		strategy_type = StrategyType::Probabilistic;
+		seed_state = seed;
+		strategy_bound = difficulty;
+	}
+
 	void Settings::use_pct_strategy(uint64_t seed, size_t bound) noexcept
 	{
 		strategy_type = StrategyType::PCT;

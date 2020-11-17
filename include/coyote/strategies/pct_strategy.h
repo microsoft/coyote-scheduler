@@ -50,7 +50,7 @@ namespace coyote
 		PCTStrategy& operator=(PCTStrategy const&) = delete;
 
 		// Returns the next operation.
-		int next_operation(Operations& operations, size_t current);
+		size_t next_operation(Operations& operations, size_t current);
 
 		// Returns the next boolean choice.
 		bool next_boolean();
