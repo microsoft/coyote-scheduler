@@ -23,8 +23,8 @@ namespace coyote
 	void Settings::use_random_strategy(uint64_t seed, size_t probability)
 	{
 		if ( probability > 100) {
-        throw std::invalid_argument("received probability greater than 100");
-    }
+			throw std::invalid_argument("received probability greater than 100");
+		}
 
 		strategy_type = StrategyType::Random;
 		seed_state = seed;
