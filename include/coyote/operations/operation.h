@@ -36,7 +36,12 @@ namespace coyote
 		// True if this operation is currently scheduled, else false.
 		bool is_scheduled;
 
-		Operation(size_t operation_id) noexcept;
+		Operation(size_t operation_id) noexcept :
+			id(operation_id),
+			status(OperationStatus::None),
+			is_scheduled(false)
+		{
+		}
 
 		Operation(Operation&& op) = delete;
 		Operation(Operation const&) = delete;
@@ -45,22 +50,100 @@ namespace coyote
 		Operation& operator=(Operation const&) = delete;
 
 		// Waits until the specified operation has completed.
-		void join_operation(size_t operation_id);
+		void join_operation(size_t operation_id)
+		{
+			status = OperationStatus::JoinAllOperations;
+			pending_join_operation_ids.insert(operation_id);
+		}
 
 		// Waits until the specified operations have completed.
-		void join_operations(const std::vector<size_t>& operation_ids, bool wait_all);
+		void join_operations(const std::vector<size_t>& operation_ids, bool wait_all)
+		{
+			if (wait_all)
+			{
+				status = OperationStatus::JoinAllOperations;
+			}
+			else
+			{
+				status = OperationStatus::JoinAnyOperations;
+			}
+
+			for (auto& operation_id : operation_ids)
+			{
+				pending_join_operation_ids.insert(operation_id);
+			}
+		}
 
 		// Waits until the specified resource sends a signal.
-		void wait_resource_signal(size_t resource_id);
+		void wait_resource_signal(size_t resource_id)
+		{
+			status = OperationStatus::WaitAllResources;
+			pending_signal_resource_ids.insert(resource_id);
+		}
 
 		// Waits until the specified resources send a signal.
-		void wait_resource_signals(const size_t* resource_ids, size_t size, bool wait_all);
+		void wait_resource_signals(const size_t* resource_ids, size_t size, bool wait_all)
+		{
+			if (wait_all)
+			{
+				status = OperationStatus::WaitAllResources;
+			}
+			else
+			{
+				status = OperationStatus::WaitAnyResource;
+			}
+
+			for (size_t i = 0; i < size; i++)
+			{
+				pending_signal_resource_ids.insert(*(resource_ids + i));
+			}
+		}
 
 		// Invoked when the specified operation completes.
-		bool on_join_operation(size_t operation_id);
+		bool on_join_operation(size_t operation_id)
+		{
+			pending_join_operation_ids.erase(operation_id);
+			if (status == OperationStatus::JoinAllOperations && pending_join_operation_ids.empty())
+			{
+				// If the operation is waiting for all operations to complete, and there
+				// are no more pending operations, then enable the operation.
+				status = OperationStatus::Enabled;
+				return true;
+			}
+			else if (status == OperationStatus::JoinAnyOperations)
+			{
+				// If the operation is waiting for at least one operation, then enable the operation,
+				// and clear the set of pending operations.
+				status = OperationStatus::Enabled;
+				pending_join_operation_ids.clear();
+				return true;
+			}
+
+			return false;
+		}
 
 		// Invoked when the specified resource sends a signal.
-		bool on_resource_signal(size_t resource_id);
+		bool on_resource_signal(size_t resource_id)
+		{
+			pending_signal_resource_ids.erase(resource_id);
+			if (status == OperationStatus::WaitAllResources && pending_signal_resource_ids.empty())
+			{
+				// If the operation is waiting for a signal from all resources, and there
+				// are no more pending resources, then enable the operation.
+				status = OperationStatus::Enabled;
+				return true;
+			}
+			else if (status == OperationStatus::WaitAnyResource)
+			{
+				// If the operation is waiting for at least one signal, then enable the operation,
+				// and clear the set of pending resources.
+				status = OperationStatus::Enabled;
+				pending_signal_resource_ids.clear();
+				return true;
+			}
+
+			return false;
+		}
 	};
 }
 

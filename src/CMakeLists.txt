@@ -1,15 +1,6 @@
 ﻿include_directories("../include/coyote")
 
-set(src_files
-    "error_code.cc"
-    "ffi.cc"
-    "scheduler.cc"
-    "settings.cc"
-    "operations/operation.cc"
-    "operations/operations.cc"
-    "strategies/random.cc"
-    "strategies/random_strategy.cc"
-    "strategies/pct_strategy.cc")
+set(src_files "ffi.cc")
 
 add_library(coyote SHARED ${src_files})
 set_target_properties(coyote PROPERTIES
