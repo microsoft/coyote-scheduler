@@ -24,8 +24,8 @@ namespace coyote
 
 	public:
 		RandomStrategy(Settings* settings) noexcept :
-			iteration_seed(settings->random_seed()),
 			generator(settings->random_seed()),
+			iteration_seed(settings->random_seed()),
 			scheduling_deviation_probability(settings->exploration_strategy_bound())
 		{
 		}
@@ -53,11 +53,11 @@ namespace coyote
 
 				if (isCurrentEnabled && (generator.next() % 100) > scheduling_deviation_probability)
 				{
-					return current;
+					return (int)current;
 				}
 			}
 
-			return operations[generator.next() % operations.size()];
+			return (int)operations[generator.next() % operations.size()];
 		}
 
 		// Returns the next boolean choice.

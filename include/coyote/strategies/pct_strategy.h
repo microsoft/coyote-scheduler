@@ -44,8 +44,8 @@ namespace coyote
 
 	public:
 		PCTStrategy(Settings* settings) noexcept :
-			iteration_seed(settings->random_seed()),
 			generator(settings->random_seed()),
+			iteration_seed(settings->random_seed()),
 			max_priority_switches(settings->exploration_strategy_bound()),
 			scheduled_steps(0),
 			schedule_length(0)
@@ -65,7 +65,7 @@ namespace coyote
 			try_deprioritize_operation_with_highest_priority(operations);
 			scheduled_steps++;
 
-			return get_operation_with_highest_priority(operations);
+			return (int)get_operation_with_highest_priority(operations);
 		}
 
 		// Returns the next boolean choice.
