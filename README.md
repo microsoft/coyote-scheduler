@@ -3,17 +3,16 @@
 ![Windows CI](https://github.com/microsoft/coyote-scheduler/workflows/Windows%20CI/badge.svg)
 ![Linux CI](https://github.com/microsoft/coyote-scheduler/workflows/Linux%20CI/badge.svg)
 
-A C++ header-only library for **language-agnostic systematic concurrency testing** by the
-[Coyote](https://microsoft.github.io/coyote/) team in [Microsoft
-Research](https://www.microsoft.com/en-us/research/).
+A C++ header-only library for **language-agnostic systematic concurrency testing**.
 
 The library provides APIs that allow you to instrument your runtime for (1) declaring concurrent
 _operations_ and synchronization _resources_. (2) taking control of these operations and resources,
-and (3) systematically exploring _interleavings_.
+and (3) systematically exploring _interleavings_. The library also exposes an FFI for interop with
+other languages.
 
-The library exposes an FFI for interop with other languages.
-
-To learn more about the research behind our technology, check out our published papers
+This library is part of the [Coyote](https://microsoft.github.io/coyote/) project by [Microsoft
+Research](https://www.microsoft.com/en-us/research/). To learn more about the research behind our
+technology, check out our published papers
 [here](https://microsoft.github.io/coyote/learn/resources/publications).
 
 ## How to build
