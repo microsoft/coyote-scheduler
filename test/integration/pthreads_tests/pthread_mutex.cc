@@ -36,16 +36,16 @@ void run_iteration()
 	FFI_pthread_mutex_init(&mutex,NULL);
 	pthread_t t1,t2;
 
-    FFI_pthread_create(&t1,NULL,work,NULL);
-    FFI_pthread_create(&t2,NULL,work,NULL);
+	FFI_pthread_create(&t1,NULL,work,NULL);
+	FFI_pthread_create(&t2,NULL,work,NULL);
 
 	scheduler->schedule_next();
 
 	FFI_pthread_join(t1,NULL);
-    FFI_pthread_join(t2,NULL);
-    FFI_pthread_mutex_destroy(&mutex);
+	FFI_pthread_join(t2,NULL);
+	FFI_pthread_mutex_destroy(&mutex);
 
-    assert(max_value_observed == 1);
+	assert(max_value_observed == 1);
 
 	FFI_detach_scheduler();
 	assert(scheduler->error_code(), ErrorCode::Success);

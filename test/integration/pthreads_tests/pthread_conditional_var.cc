@@ -57,16 +57,16 @@ void run_iteration()
 
 	pthread_t t1,t2;
 
-    FFI_pthread_create(&t1, NULL, &fill, NULL);
-    FFI_pthread_create(&t2, NULL, &increment, NULL);
+	FFI_pthread_create(&t1, NULL, &fill, NULL);
+	FFI_pthread_create(&t2, NULL, &increment, NULL);
 
 	scheduler->schedule_next();
 
 	FFI_pthread_join(t1, NULL);
-    FFI_pthread_join(t2, NULL);
+	FFI_pthread_join(t2, NULL);
 
-    FFI_pthread_cond_destroy(&cond_var);
-    FFI_pthread_mutex_destroy(&fill_mutex);
+	FFI_pthread_cond_destroy(&cond_var);
+	FFI_pthread_mutex_destroy(&fill_mutex);
 
 	FFI_detach_scheduler();
 	assert(scheduler->error_code(), ErrorCode::Success);
