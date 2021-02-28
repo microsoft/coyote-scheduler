@@ -59,13 +59,13 @@ namespace coyote
 		PCTStrategy& operator=(PCTStrategy const&) = delete;
 
 		// Returns the next operation.
-		int next_operation(Operations& operations, size_t current)
+		size_t next_operation(Operations& operations, size_t current)
 		{
 			set_new_operation_priorities(operations, current);
 			try_deprioritize_operation_with_highest_priority(operations);
 			scheduled_steps++;
 
-			return (int)get_operation_with_highest_priority(operations);
+			return get_operation_with_highest_priority(operations);
 		}
 
 		// Returns the next boolean choice.

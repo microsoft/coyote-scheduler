@@ -37,7 +37,7 @@ namespace coyote
 		RandomStrategy& operator=(RandomStrategy const&) = delete;
 
 		// Returns the next operation.
-		int next_operation(Operations& operations, size_t current)
+		size_t next_operation(Operations& operations, size_t current)
 		{
 			if (scheduling_deviation_probability < 100)
 			{
@@ -53,11 +53,11 @@ namespace coyote
 
 				if (isCurrentEnabled && (generator.next() % 100) > scheduling_deviation_probability)
 				{
-					return (int)current;
+					return current;
 				}
 			}
 
-			return (int)operations[generator.next() % operations.size()];
+			return operations[generator.next() % operations.size()];
 		}
 
 		// Returns the next boolean choice.
