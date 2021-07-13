@@ -53,7 +53,7 @@ std::string error_message(ErrorCode error_code)
 		}
 }
 
-void assert(bool predicate, std::string error)
+void assert(bool predicate, std::string error = "Assert failed\n")
 {
 	if (!predicate)
 	{
